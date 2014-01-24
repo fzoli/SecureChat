@@ -33,8 +33,8 @@ public class JsonOutputStream extends OutputStream implements ObjectOutput {
      */
     @Override
     public void writeObject(Object obj) throws IOException {
-        write((obj.getClass().getName() + "\r\n").getBytes());
-        write((gson.toJson(obj) + "\r\n\r\n").getBytes());
+        write((obj.getClass().getName() + "\r\n").getBytes("utf8"));
+        write((gson.toJson(obj) + "\r\n\r\n").getBytes("utf8"));
     }
     
 //    public static void main(String[] args) throws IOException, ClassNotFoundException {

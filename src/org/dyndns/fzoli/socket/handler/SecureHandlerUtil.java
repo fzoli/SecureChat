@@ -297,4 +297,11 @@ class SecureHandlerUtil {
         }
     }
     
+//    /**
+//     * Ékezetes név tesztelése.
+//     */
+//    public static void main(String[] args) throws Exception {
+//        JOptionPane.showMessageDialog(null, getCertificateSubjectDNMap("2.5.4.41=#140e4661726b6173205a6f6c74c3a16e,CN=fzoli,OU=Chat certificate,O=fzoli.dyndns.org,L=Budapest,ST=Pest,C=HU"));
+//    }
+    
 }

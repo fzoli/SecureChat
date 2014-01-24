@@ -595,9 +595,12 @@ public class ConfigEditorFrame extends FrontFrame implements RelocalizableWindow
         if (Config.save(CONFIG)) {
             if (!previousConfig.equals(CONFIG) && Main.isConnected()) {
                 int answer = OptionPane.showYesNoDialog(ConfigEditorFrame.this, getString("reconnect_ask"), getString("reconnect"));
+                setVisible(false);
                 if (answer == 0) Main.reconnect();
             }
-            setVisible(false);
+            else {
+                setVisible(false);
+            }
         }
         else {
             OptionPane.showWarningDialog(R.getClientImage(), getString("saveError"), getString("warning"));

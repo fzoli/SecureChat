@@ -1,5 +1,6 @@
 package org.dyndns.fzoli.chat.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class GroupChatData extends Data<GroupChatData, GroupChatPartialData> {
     }
     
     public GroupChatData(GroupChatData d) {
-        this(d.getUsers(), d.getMessages());
+        this(new ArrayList<UserData>(d.getUsers()), new ArrayList<ChatMessage>(d.getMessages()));
     }
     
     public List<UserData> getUsers() {

@@ -21,7 +21,14 @@ public class JsonInputStream extends InputStream implements ObjectInput {
     private final BufferedReader in;
     
     public JsonInputStream(InputStream in) {
-        this.in = new BufferedReader(new InputStreamReader(in));
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new InputStreamReader(in, "utf8"));
+        }
+        catch (Exception ex) {
+            br = new BufferedReader(new InputStreamReader(in));
+        }
+        this.in = br;
     }
     
     @Override

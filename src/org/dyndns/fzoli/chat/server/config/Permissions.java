@@ -57,7 +57,6 @@ public final class Permissions {
      */
     private static void onRefresh(PermissionConfig previous) {
         List<SecureProcess> procs = ServerProcesses.getProcesses(SecureProcess.class);
-        System.out.println(procs.size());
         for (SecureProcess p : procs) {
             String userName = p.getRemoteCommonName();
             if (userName != null && getConfig().isBlocked(userName)) p.getHandler().closeProcesses();
