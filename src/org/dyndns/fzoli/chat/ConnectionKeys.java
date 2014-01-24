@@ -23,10 +23,10 @@ public interface ConnectionKeys {
     
     /**
      * A kliens a kapcsolat bontása után ennyi időt vár míg újra nem kapcsolódik.
-     * Várakozási idő: 3 másodperc
+     * Várakozási idő: 1 másodperc
      * Ajánlott érték: 500
      */
-    int RECONN_DELAY = 3000;
+    int RECONN_DELAY = 1000;
     
     /**
      * A kliensnek a szerverrel való kapcsolat kialakítására (host feloldás stb.) szánt idő.

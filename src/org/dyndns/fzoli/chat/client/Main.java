@@ -342,7 +342,7 @@ public class Main {
      * @param status a kapcsolat státusza
      */
     public static void showConnectionStatus(Status status) {
-        if (exiting || CONFIG_EDITOR.isVisible()) return;
+        if (exiting) return;
         if (connecting && status != Status.CONNECTING) return;
         PROGRESS_FRAME.setStatus(status, MI_RECONNECT);
         CHAT_FRAME.setVisible(false);
@@ -375,17 +375,16 @@ public class Main {
     public static void reconnect() {
         if (CONN.isConnecting()) return;
         CONN.disconnect();
-        runClient(true, false);
+        runClient(true);
     }
     
     /**
      * A program értelme.
      * Kijelzi, hogy elkezdődött a kapcsolódás és kapcsolódik a szerverhez (ha még nem történt meg).
      * Innentől kezdve már a kommunikációtól függ, hogyan folytatódik a program futása.
-     * @param reloadMap legyen-e újratöltve a térkép dialóus
      */
-    public static void runClient(boolean reloadMap) {
-        runClient(false, reloadMap);
+    public static void runClient() {
+        runClient(false);
     }
     
     /**
@@ -395,9 +394,8 @@ public class Main {
      * és így a szervernek is van ideje bezárni a régi kapcsolatokat és frissíteni az adatokat.
      * Innentől kezdve már a kommunikációtól függ, hogyan folytatódik a program futása.
      * @param delay legyen-e késleltetés
-     * @param reloadMap legyen-e újratöltve a térkép dialóus
      */
-    public static void runClient(boolean delay, final boolean reloadMap) {
+    public static void runClient(boolean delay) {
         if (connecting || CONN.isConnected()) return;
         connecting = true;
         showConnecting();

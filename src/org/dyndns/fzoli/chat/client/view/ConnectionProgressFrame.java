@@ -156,7 +156,7 @@ public class ConnectionProgressFrame extends AbstractConnectionProgressFrame imp
      */
     @Override
     protected void onAgain() {
-        Main.runClient(true, true);
+        Main.runClient(true);
     }
 
     /**
