@@ -39,12 +39,9 @@ public class ConnectionHelper extends AbstractConnectionHelper implements Connec
         return new ChatClientHandler(socket, deviceId, connectionId);
     }
 
-    /**
-     * Ha kapcsolódott a kliens összes szála a szerverhez, a kapcsolódásjelzés elrejtődik.
-     */
     @Override
     protected void onConnected() {
-        showConnectionStatus(null);
+        ;
     }
 
     /**

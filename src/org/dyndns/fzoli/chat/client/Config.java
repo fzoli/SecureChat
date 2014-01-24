@@ -1,6 +1,5 @@
 package org.dyndns.fzoli.chat.client;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 import org.dyndns.fzoli.chat.ClientConfig;
+import org.dyndns.fzoli.chat.ConnectionKeys;
 import org.dyndns.fzoli.chat.resource.R;
 import org.dyndns.fzoli.ui.systemtray.SystemTrayIcon;
 import org.dyndns.fzoli.ui.systemtray.TrayIcon;
@@ -148,6 +148,11 @@ public class Config implements Serializable , ClientConfig {
         return port;
     }
 
+    @Override
+    public int getConnTimeout() {
+        return ConnectionKeys.CONN_TIMEOUT;
+    }
+    
     /**
      * Az egyetlen megbízható tanúsítvány-kiállító.
      */

@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.SwingUtilities;
+import org.dyndns.fzoli.chat.ConnectionKeys;
 import static org.dyndns.fzoli.chat.SplashScreenLoader.setSplashMessage;
 import org.dyndns.fzoli.chat.resource.R;
 import org.dyndns.fzoli.chat.client.socket.ConnectionHelper;
@@ -408,7 +409,7 @@ public class Main {
                 CONN.connect();
             }
             
-        }, delay ? 500 : 0);
+        }, delay ? ConnectionKeys.RECONN_DELAY : 0);
     }
     
     /**

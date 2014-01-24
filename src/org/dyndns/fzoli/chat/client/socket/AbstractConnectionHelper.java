@@ -38,7 +38,7 @@ public abstract class AbstractConnectionHelper extends ClientConnectionHelper im
      */
     @Override
     protected SSLSocket createConnection() throws GeneralSecurityException, IOException {
-        return SSLSocketUtil.createClientSocket(CONFIG.getAddress(), CONFIG.getPort(), CONFIG.getCAFile(), CONFIG.getCertFile(), CONFIG.getKeyFile(), CONFIG.getPassword(), DC_TIMEOUT2, new Callback() {
+        return SSLSocketUtil.createClientSocket(CONFIG.getAddress(), CONFIG.getPort(), CONFIG.getCAFile(), CONFIG.getCertFile(), CONFIG.getKeyFile(), CONFIG.getPassword(), CONFIG.getConnTimeout(), new Callback() {
 
             @Override
             public boolean onConnect() {

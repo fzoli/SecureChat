@@ -1,7 +1,7 @@
 package org.dyndns.fzoli.chat;
 
 /**
- * Kapcsolat- és eszközazonosítók.
+ * Kapcsolat- és eszközazonosítók és segédváltozók.
  * @author zoli
  */
 public interface ConnectionKeys {
@@ -22,22 +22,46 @@ public interface ConnectionKeys {
     int KEY_CONN_MESSAGE = 1;
     
     /**
-     * Az első időtúllépés a kapcsolatban.
-     * Időkorlát: 1 másodperc
+     * A kliens a kapcsolat bontása után ennyi időt vár míg újra nem kapcsolódik.
+     * Várakozási idő: 3 másodperc
+     * Ajánlott érték: 500
      */
-    int DC_TIMEOUT1 = 1000;
+    int RECONN_DELAY = 3000;
+    
+    /**
+     * A kliensnek a szerverrel való kapcsolat kialakítására (host feloldás stb.) szánt idő.
+     * Időkorlát: 1 perc
+     * Ajánlott érték: 10 másodperc
+     */
+    int CONN_TIMEOUT = 60000;
+    
+    /**
+     * A kapcsolat kialakítása után a kapcsolatazonosító cserékre szánt idő.
+     * Időkorlát: 15 másodperc
+     * Ajánlott érték: 3 másodperc
+     */
+    int READ_TIMEOUT = 15000;
+    
+    /**
+     * Az első időtúllépés a kapcsolatban.
+     * Időkorlát: 5 másodperc
+     * Ajánlott érték: 1 másodperc
+     */
+    int DC_TIMEOUT1 = 5000;
     
     /**
      * A második időtúllépés.
      * A szerver ekkor az összes kapcsolatot bezárja.
-     * Időkorlát: 10 másodperc
+     * Időkorlát: 20 másodperc
+     * Ajánlott érték: 10 másodperc
      */
-    int DC_TIMEOUT2 = 10000;
+    int DC_TIMEOUT2 = 20000;
     
     /**
      * Két üzenetváltás között eltelt idő, amit mindkét oldalon ki kell várni a pontos eredmény érdekében.
-     * Várakozási idő: 250 ezredmásodperc
+     * Várakozási idő: fél másodperc
+     * Ajánlott érték: 250 ezredmásodperc
      */
-    int DC_DELAY = 250;
+    int DC_DELAY = 500;
     
 }

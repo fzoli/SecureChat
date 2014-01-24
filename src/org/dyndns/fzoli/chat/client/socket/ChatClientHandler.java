@@ -25,6 +25,11 @@ public class ChatClientHandler extends AbstractSecureClientHandler implements Co
     public ChatClientHandler(SSLSocket socket, int devId, int connId) {
         super(socket, devId, connId);
     }
+
+    @Override
+    protected int getPrefixSoTimeout() {
+        return READ_TIMEOUT;
+    }
     
     @Override
     protected DeviceHandler createDeviceHandler(InputStream in, OutputStream out) {

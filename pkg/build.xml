@@ -10,5 +10,14 @@
             </manifest>
         </jar>
     </target>
+    <target name="combine-jars-server">
+        <jar destfile="../bin-server/SecureChat.jar">
+            <zipgroupfileset dir="../dist/lib" includes="*.jar"/>
+            <zipgroupfileset dir="../dist" includes="SecureChat.jar" />
+            <manifest>
+                <attribute name="Main-Class" value="org.dyndns.fzoli.chat.server.Main" />
+            </manifest>
+        </jar>
+    </target>
 </project>
 

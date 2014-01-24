@@ -125,6 +125,22 @@ public abstract class AbstractServerHandler extends AbstractHandler {
     }
     
     /**
+     * A kliens-kapcsolat létrejötte után az azonosító cserék és inicializálás folyamatához használt időtúllépés.
+     * Alapértelmezés: 3 mp
+     */
+    protected int getPrefixSoTimeout() {
+        return 3000;
+    }
+    
+    /**
+     * Az inicializálás után a processnek adódik át a socket; a process ezen időtúllépéssel kapja meg a socketet.
+     * Alapértelmezés: végtelen
+     */
+    protected int getPostfixSoTimeout() {
+        return 0;
+    }
+    
+    /**
      * Ez a metódus fut le a szálban.
      * Az eszköz- és kapcsolatazonosító klienstől való fogadása után eldől, melyik kapcsolatfeldolgozót
      * kell használni a szerver oldalon és a konkrét feldolgozás kezdődik meg.
@@ -140,7 +156,7 @@ public abstract class AbstractServerHandler extends AbstractHandler {
             OutputStream out = getSocket().getOutputStream();
             
             // maximum 3 másodperc van a két bájt olvasására és az inicializálásra
-            getSocket().setSoTimeout(3000);
+            getSocket().setSoTimeout(getPrefixSoTimeout());
             
             // eszközazonosító elkérése a klienstől
             setDeviceId(in.read());
@@ -164,7 +180,7 @@ public abstract class AbstractServerHandler extends AbstractHandler {
                 readStatus(dh);
 
                 // időtúllépés eredeti állapota kikapcsolva
-                getSocket().setSoTimeout(0);
+                getSocket().setSoTimeout(getPostfixSoTimeout());
 
                 // adatfeldolgozó kiválasztása
                 proc = selectProcess();

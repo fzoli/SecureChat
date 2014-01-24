@@ -57,6 +57,11 @@ public class ChatServerHandler extends AbstractSecureServerHandler implements Co
     }
     
     @Override
+    protected int getPrefixSoTimeout() {
+        return READ_TIMEOUT;
+    }
+    
+    @Override
     protected SecureProcess selectProcess() {
         if (getDeviceId() == KEY_DEV_CLIENT) {
             switch (getConnectionId()) {

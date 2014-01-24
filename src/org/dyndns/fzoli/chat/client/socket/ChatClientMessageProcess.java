@@ -9,6 +9,7 @@ import org.dyndns.fzoli.socket.process.impl.MessageProcess;
 import org.dyndns.fzoli.socket.stream.JsonStreamMethod;
 import org.dyndns.fzoli.socket.stream.StreamMethod;
 import static org.dyndns.fzoli.chat.client.Main.DATA;
+import static org.dyndns.fzoli.chat.client.Main.showConnectionStatus;
 import org.dyndns.fzoli.chat.client.view.ChatFrame;
 import org.dyndns.fzoli.chat.model.UserData;
 
@@ -34,6 +35,7 @@ public class ChatClientMessageProcess extends MessageProcess {
 
     @Override
     protected void onStart() {
+        showConnectionStatus(null);
         ChatFrame.setSenderName(getLocalCommonName());
     }
     
