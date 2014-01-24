@@ -1,0 +1,74 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 5 (0x5)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=HU, ST=Pest, L=Budapest, O=Mobile-RC Test, OU=Test certificate, CN=Mobile-RC Test CA/emailAddress=info@mobilerc.test
+        Validity
+            Not Before: Feb  1 19:15:01 2013 GMT
+            Not After : Jan  8 19:15:01 2113 GMT
+        Subject: C=HU, ST=Pest, L=Budapest, O=Mobile-RC Test, OU=Test certificate, CN=egy nagyon okos kliens/emailAddress=info@mobilerc.test
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:cc:73:84:c0:75:29:c9:45:6b:d2:24:46:88:7a:
+                    d3:a2:60:a2:55:00:84:c4:f3:f7:ac:eb:06:eb:d4:
+                    9e:b5:3e:65:9f:51:86:7c:bb:4b:a3:1b:ac:d5:2a:
+                    82:d4:5b:ab:dd:94:46:13:9a:fe:6e:4e:23:2c:7e:
+                    1d:a3:0b:6a:d3:ca:be:09:28:c7:62:00:47:a2:8f:
+                    ae:17:55:0e:9e:a7:0e:5c:bd:3b:8f:c4:b9:5d:42:
+                    79:38:a4:4c:b5:00:95:90:e7:a4:0d:dc:ae:45:cc:
+                    d2:44:3d:9d:9b:59:15:46:dd:ff:3d:9c:bb:6e:af:
+                    18:35:19:60:da:84:5c:82:31
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                FA:A6:A1:ED:50:EB:4A:35:14:64:5E:FC:FB:3A:B4:E0:EE:DC:94:D8
+            X509v3 Authority Key Identifier: 
+                keyid:B7:EF:E1:40:88:B0:6D:68:F1:4D:4A:91:82:64:94:12:C8:15:76:74
+                DirName:/C=HU/ST=Pest/L=Budapest/O=Mobile-RC Test/OU=Test certificate/CN=Mobile-RC Test CA/emailAddress=info@mobilerc.test
+                serial:F5:58:1D:14:10:94:FF:31
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha1WithRSAEncryption
+        04:77:0b:4e:59:3c:30:0a:a9:a3:7d:a4:5d:cf:b2:df:be:27:
+        68:e2:55:44:4d:59:79:b0:a3:24:ec:2e:dc:52:86:ee:3c:15:
+        dd:e2:61:5e:cb:0f:15:a7:5c:e3:de:99:6e:27:82:bf:80:0b:
+        32:64:89:46:b2:82:94:14:40:48:19:57:bb:9e:48:b8:dd:dd:
+        5a:e9:90:b8:18:a1:02:03:9f:d9:ae:e3:79:72:92:7d:0d:58:
+        c5:4f:37:c4:82:14:cd:68:cc:08:93:3a:c3:2e:94:86:c2:6f:
+        35:ab:28:be:05:21:16:44:b9:fb:06:6b:4b:0d:25:a7:78:57:
+        02:dd
+-----BEGIN CERTIFICATE-----
+MIIEHjCCA4egAwIBAgIBBTANBgkqhkiG9w0BAQUFADCBojELMAkGA1UEBhMCSFUx
+DTALBgNVBAgTBFBlc3QxETAPBgNVBAcTCEJ1ZGFwZXN0MRcwFQYDVQQKEw5Nb2Jp
+bGUtUkMgVGVzdDEZMBcGA1UECxMQVGVzdCBjZXJ0aWZpY2F0ZTEaMBgGA1UEAxMR
+TW9iaWxlLVJDIFRlc3QgQ0ExITAfBgkqhkiG9w0BCQEWEmluZm9AbW9iaWxlcmMu
+dGVzdDAgFw0xMzAyMDExOTE1MDFaGA8yMTEzMDEwODE5MTUwMVowgacxCzAJBgNV
+BAYTAkhVMQ0wCwYDVQQIEwRQZXN0MREwDwYDVQQHEwhCdWRhcGVzdDEXMBUGA1UE
+ChMOTW9iaWxlLVJDIFRlc3QxGTAXBgNVBAsTEFRlc3QgY2VydGlmaWNhdGUxHzAd
+BgNVBAMTFmVneSBuYWd5b24gb2tvcyBrbGllbnMxITAfBgkqhkiG9w0BCQEWEmlu
+Zm9AbW9iaWxlcmMudGVzdDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAzHOE
+wHUpyUVr0iRGiHrTomCiVQCExPP3rOsG69SetT5ln1GGfLtLoxus1SqC1Fur3ZRG
+E5r+bk4jLH4dowtq08q+CSjHYgBHoo+uF1UOnqcOXL07j8S5XUJ5OKRMtQCVkOek
+DdyuRczSRD2dm1kVRt3/PZy7bq8YNRlg2oRcgjECAwEAAaOCAVkwggFVMAkGA1Ud
+EwQCMAAwLQYJYIZIAYb4QgENBCAWHkVhc3ktUlNBIEdlbmVyYXRlZCBDZXJ0aWZp
+Y2F0ZTAdBgNVHQ4EFgQU+qah7VDrSjUUZF78+zq04O7clNgwgdcGA1UdIwSBzzCB
+zIAUt+/hQIiwbWjxTUqRgmSUEsgVdnShgaikgaUwgaIxCzAJBgNVBAYTAkhVMQ0w
+CwYDVQQIEwRQZXN0MREwDwYDVQQHEwhCdWRhcGVzdDEXMBUGA1UEChMOTW9iaWxl
+LVJDIFRlc3QxGTAXBgNVBAsTEFRlc3QgY2VydGlmaWNhdGUxGjAYBgNVBAMTEU1v
+YmlsZS1SQyBUZXN0IENBMSEwHwYJKoZIhvcNAQkBFhJpbmZvQG1vYmlsZXJjLnRl
+c3SCCQD1WB0UEJT/MTATBgNVHSUEDDAKBggrBgEFBQcDAjALBgNVHQ8EBAMCB4Aw
+DQYJKoZIhvcNAQEFBQADgYEABHcLTlk8MAqpo32kXc+y374naOJVRE1ZebCjJOwu
+3FKG7jwV3eJhXssPFadc496ZbieCv4ALMmSJRrKClBRASBlXu55IuN3dWumQuBih
+AgOf2a7jeXKSfQ1YxU83xIIUzWjMCJM6wy6UhsJvNasovgUhFkS5+wZrSw0lp3hX
+At0=
+-----END CERTIFICATE-----

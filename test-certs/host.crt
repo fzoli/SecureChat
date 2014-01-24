@@ -1,0 +1,73 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=HU, ST=Pest, L=Budapest, O=Mobile-RC Test, OU=Test certificate, CN=Mobile-RC Test CA/emailAddress=info@mobilerc.test
+        Validity
+            Not Before: Sep 29 23:43:39 2012 GMT
+            Not After : Sep 27 23:43:39 2022 GMT
+        Subject: C=HU, ST=Pest, L=Budapest, O=Mobile-RC Test, OU=Test certificate, CN=host/emailAddress=info@mobilerc.test
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:ab:64:0e:a1:47:bf:5d:79:c6:fb:02:8b:01:d2:
+                    07:27:6a:83:99:db:25:ed:a5:06:34:71:06:c4:dc:
+                    57:0c:6d:8c:1a:55:e2:43:b6:f0:c7:46:bb:d1:dd:
+                    8e:7b:a3:8b:7d:4e:ad:ca:97:7d:11:e2:dd:80:e8:
+                    91:29:2d:43:43:03:48:78:78:ec:89:48:11:aa:89:
+                    30:0a:a7:0b:da:a4:3c:e2:29:1c:30:c0:3a:1c:32:
+                    b6:a6:a8:a4:cc:ce:9f:8d:de:4d:a1:3f:62:90:fa:
+                    37:e7:2f:2d:61:88:6e:05:17:23:d9:fa:52:1c:12:
+                    c4:f4:ec:83:0b:e0:d9:40:fb
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                4B:2A:61:12:5D:51:C3:63:4C:F2:4F:4B:62:48:CE:0B:77:90:ED:4F
+            X509v3 Authority Key Identifier: 
+                keyid:B1:1F:30:D9:42:8B:B2:9E:99:F5:37:5E:BC:70:95:2E:F3:72:10:B3
+                DirName:/C=HU/ST=Pest/L=Budapest/O=Mobile-RC Test/OU=Test certificate/CN=Mobile-RC Test CA/emailAddress=info@mobilerc.test
+                serial:BD:AA:51:57:35:54:74:CB
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha1WithRSAEncryption
+        9e:15:97:a1:ab:c8:d2:1c:af:de:31:f0:94:97:48:07:0c:dc:
+        2b:dd:45:96:9d:6c:f0:e1:d9:44:68:cd:c1:b9:00:91:b9:c5:
+        51:43:0b:a3:70:73:55:09:e7:e8:86:56:67:cd:82:34:ae:a1:
+        89:fe:f3:ee:f6:ea:f7:bb:48:32:78:c8:3c:43:e2:e6:ee:bf:
+        ac:b0:56:19:55:1b:fe:c8:22:34:86:89:51:14:2e:7c:d8:2a:
+        12:f3:85:cd:ab:45:7a:0f:19:85:2d:e3:13:8d:5a:a5:5a:a2:
+        32:5f:6b:e5:40:0f:39:86:22:18:4b:76:97:61:a4:d6:da:6e:
+        6a:79
+-----BEGIN CERTIFICATE-----
+MIIECjCCA3OgAwIBAgIBAjANBgkqhkiG9w0BAQUFADCBojELMAkGA1UEBhMCSFUx
+DTALBgNVBAgTBFBlc3QxETAPBgNVBAcTCEJ1ZGFwZXN0MRcwFQYDVQQKEw5Nb2Jp
+bGUtUkMgVGVzdDEZMBcGA1UECxMQVGVzdCBjZXJ0aWZpY2F0ZTEaMBgGA1UEAxMR
+TW9iaWxlLVJDIFRlc3QgQ0ExITAfBgkqhkiG9w0BCQEWEmluZm9AbW9iaWxlcmMu
+dGVzdDAeFw0xMjA5MjkyMzQzMzlaFw0yMjA5MjcyMzQzMzlaMIGVMQswCQYDVQQG
+EwJIVTENMAsGA1UECBMEUGVzdDERMA8GA1UEBxMIQnVkYXBlc3QxFzAVBgNVBAoT
+Dk1vYmlsZS1SQyBUZXN0MRkwFwYDVQQLExBUZXN0IGNlcnRpZmljYXRlMQ0wCwYD
+VQQDEwRob3N0MSEwHwYJKoZIhvcNAQkBFhJpbmZvQG1vYmlsZXJjLnRlc3QwgZ8w
+DQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKtkDqFHv115xvsCiwHSBydqg5nbJe2l
+BjRxBsTcVwxtjBpV4kO28MdGu9Hdjnuji31OrcqXfRHi3YDokSktQ0MDSHh47IlI
+EaqJMAqnC9qkPOIpHDDAOhwytqaopMzOn43eTaE/YpD6N+cvLWGIbgUXI9n6UhwS
+xPTsgwvg2UD7AgMBAAGjggFZMIIBVTAJBgNVHRMEAjAAMC0GCWCGSAGG+EIBDQQg
+Fh5FYXN5LVJTQSBHZW5lcmF0ZWQgQ2VydGlmaWNhdGUwHQYDVR0OBBYEFEsqYRJd
+UcNjTPJPS2JIzgt3kO1PMIHXBgNVHSMEgc8wgcyAFLEfMNlCi7KemfU3XrxwlS7z
+chCzoYGopIGlMIGiMQswCQYDVQQGEwJIVTENMAsGA1UECBMEUGVzdDERMA8GA1UE
+BxMIQnVkYXBlc3QxFzAVBgNVBAoTDk1vYmlsZS1SQyBUZXN0MRkwFwYDVQQLExBU
+ZXN0IGNlcnRpZmljYXRlMRowGAYDVQQDExFNb2JpbGUtUkMgVGVzdCBDQTEhMB8G
+CSqGSIb3DQEJARYSaW5mb0Btb2JpbGVyYy50ZXN0ggkAvapRVzVUdMswEwYDVR0l
+BAwwCgYIKwYBBQUHAwIwCwYDVR0PBAQDAgeAMA0GCSqGSIb3DQEBBQUAA4GBAJ4V
+l6GryNIcr94x8JSXSAcM3CvdRZadbPDh2URozcG5AJG5xVFDC6Nwc1UJ5+iGVmfN
+gjSuoYn+8+726ve7SDJ4yDxD4ubuv6ywVhlVG/7IIjSGiVEULnzYKhLzhc2rRXoP
+GYUt4xONWqVaojJfa+VADzmGIhhLdpdhpNbabmp5
+-----END CERTIFICATE-----

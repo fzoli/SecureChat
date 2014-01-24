@@ -1,0 +1,73 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=HU, ST=Pest, L=Budapest, O=Mobile-RC Test, OU=Test certificate, CN=Mobile-RC Test CA/emailAddress=info@mobilerc.test
+        Validity
+            Not Before: Jan 10 02:07:18 2013 GMT
+            Not After : Dec 17 02:07:18 2112 GMT
+        Subject: C=HU, ST=Pest, L=Budapest, O=Mobile-RC Test, OU=Test certificate, CN=controller/emailAddress=info@mobilerc.test
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:f0:09:56:8e:de:90:d4:2f:35:8c:44:c2:36:5c:
+                    1c:47:df:cc:16:de:e9:28:8f:d0:40:8d:6c:b6:16:
+                    4c:42:4a:32:27:27:ab:dc:19:0c:80:d0:01:63:cb:
+                    89:11:cc:c3:81:4d:b5:10:33:e2:cf:8d:d7:25:8d:
+                    84:5f:42:62:43:1f:f1:d3:a8:33:5c:36:3a:bc:2e:
+                    13:75:b8:7a:b1:22:bb:cf:38:36:eb:13:2c:5a:ff:
+                    d6:6f:18:83:4e:b4:98:2a:e0:4b:68:09:d1:91:39:
+                    0a:20:51:76:e5:e0:e2:e3:59:bb:a0:7a:d0:31:5d:
+                    32:aa:9e:31:0e:1c:de:c3:b5
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                F0:CD:00:BB:88:70:50:80:B9:72:0B:D7:EF:D2:1C:4B:99:BF:8A:0C
+            X509v3 Authority Key Identifier: 
+                keyid:B7:EF:E1:40:88:B0:6D:68:F1:4D:4A:91:82:64:94:12:C8:15:76:74
+                DirName:/C=HU/ST=Pest/L=Budapest/O=Mobile-RC Test/OU=Test certificate/CN=Mobile-RC Test CA/emailAddress=info@mobilerc.test
+                serial:F5:58:1D:14:10:94:FF:31
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha1WithRSAEncryption
+        3c:4f:3b:64:b3:dd:9a:09:94:4d:ea:3d:b0:2e:c3:9f:6b:3d:
+        31:76:7d:e2:bb:af:af:c9:ca:af:e9:aa:da:05:11:a0:a6:69:
+        cb:64:ab:30:c9:33:dc:91:13:1d:85:29:01:07:c5:c5:ef:e1:
+        74:eb:54:9b:6a:2a:a1:20:16:84:f9:5d:96:46:11:91:33:3e:
+        a7:5e:67:db:05:c7:2d:db:c7:33:38:03:3c:e3:ce:33:4c:3c:
+        20:2a:16:df:7b:5d:2f:9b:ad:aa:10:79:b8:c0:64:7f:5d:03:
+        5d:10:1b:bc:54:b2:11:39:a3:d0:da:06:50:95:ea:80:09:e2:
+        32:45
+-----BEGIN CERTIFICATE-----
+MIIEEjCCA3ugAwIBAgIBATANBgkqhkiG9w0BAQUFADCBojELMAkGA1UEBhMCSFUx
+DTALBgNVBAgTBFBlc3QxETAPBgNVBAcTCEJ1ZGFwZXN0MRcwFQYDVQQKEw5Nb2Jp
+bGUtUkMgVGVzdDEZMBcGA1UECxMQVGVzdCBjZXJ0aWZpY2F0ZTEaMBgGA1UEAxMR
+TW9iaWxlLVJDIFRlc3QgQ0ExITAfBgkqhkiG9w0BCQEWEmluZm9AbW9iaWxlcmMu
+dGVzdDAgFw0xMzAxMTAwMjA3MThaGA8yMTEyMTIxNzAyMDcxOFowgZsxCzAJBgNV
+BAYTAkhVMQ0wCwYDVQQIEwRQZXN0MREwDwYDVQQHEwhCdWRhcGVzdDEXMBUGA1UE
+ChMOTW9iaWxlLVJDIFRlc3QxGTAXBgNVBAsTEFRlc3QgY2VydGlmaWNhdGUxEzAR
+BgNVBAMTCmNvbnRyb2xsZXIxITAfBgkqhkiG9w0BCQEWEmluZm9AbW9iaWxlcmMu
+dGVzdDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA8AlWjt6Q1C81jETCNlwc
+R9/MFt7pKI/QQI1sthZMQkoyJyer3BkMgNABY8uJEczDgU21EDPiz43XJY2EX0Ji
+Qx/x06gzXDY6vC4Tdbh6sSK7zzg26xMsWv/WbxiDTrSYKuBLaAnRkTkKIFF25eDi
+41m7oHrQMV0yqp4xDhzew7UCAwEAAaOCAVkwggFVMAkGA1UdEwQCMAAwLQYJYIZI
+AYb4QgENBCAWHkVhc3ktUlNBIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4E
+FgQU8M0Au4hwUIC5cgvX79IcS5m/igwwgdcGA1UdIwSBzzCBzIAUt+/hQIiwbWjx
+TUqRgmSUEsgVdnShgaikgaUwgaIxCzAJBgNVBAYTAkhVMQ0wCwYDVQQIEwRQZXN0
+MREwDwYDVQQHEwhCdWRhcGVzdDEXMBUGA1UEChMOTW9iaWxlLVJDIFRlc3QxGTAX
+BgNVBAsTEFRlc3QgY2VydGlmaWNhdGUxGjAYBgNVBAMTEU1vYmlsZS1SQyBUZXN0
+IENBMSEwHwYJKoZIhvcNAQkBFhJpbmZvQG1vYmlsZXJjLnRlc3SCCQD1WB0UEJT/
+MTATBgNVHSUEDDAKBggrBgEFBQcDAjALBgNVHQ8EBAMCB4AwDQYJKoZIhvcNAQEF
+BQADgYEAPE87ZLPdmgmUTeo9sC7Dn2s9MXZ94ruvr8nKr+mq2gURoKZpy2SrMMkz
+3JETHYUpAQfFxe/hdOtUm2oqoSAWhPldlkYRkTM+p15n2wXHLdvHMzgDPOPOM0w8
+ICoW33tdL5utqhB5uMBkf10DXRAbvFSyETmj0NoGUJXqgAniMkU=
+-----END CERTIFICATE-----
