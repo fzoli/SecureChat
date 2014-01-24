@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="test">
+    <target name="combine-jars">
+        <jar destfile="../bin/SecureChat.jar">
+            <zipgroupfileset dir="../dist/lib" includes="*.jar"/>
+            <zipgroupfileset dir="../dist" includes="SecureChat.jar" />
+            <manifest>
+                <attribute name="Main-Class" value="org.dyndns.fzoli.chat.client.Main" />
+                <attribute name="SplashScreen-Image" value="org/dyndns/fzoli/chat/resource/splash.gif" />
+            </manifest>
+        </jar>
+    </target>
+</project>
+

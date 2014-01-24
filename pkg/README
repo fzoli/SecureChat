@@ -1,0 +1,3 @@
+Miután a NetBeans létrehozta a dist könyvtárat benne a lib könyvtárral és az alkalmazással,
+az ebben a könyvtárban lévő build.xml alapján készíthető egy egyesített jar file az alábbi parancsot futtatva:
+ant combine-jars
