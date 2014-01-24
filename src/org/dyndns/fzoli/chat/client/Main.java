@@ -204,7 +204,16 @@ public class Main {
     private static void setSystemTrayIcon() {
         if (SystemTrayIcon.init(true) && SystemTrayIcon.isSupported()) {
             // az ikon beállítása
-            SystemTrayIcon.setIcon(getString("app_name"), R.resize(R.getClientImage(), SystemTrayIcon.getIconWidth()));
+            SystemTrayIcon.setIcon(getString("app_name"), R.resize(R.getClientImage(), SystemTrayIcon.getIconWidth()), new Runnable() {
+
+                @Override
+                public void run() {
+                    if (CONN.isConnected() && CHAT_FRAME != null) {
+                        CHAT_FRAME.setVisible(!CHAT_FRAME.isVisible());
+                    }
+                }
+                
+            });
             // nyelv választó opció hozzáadása
             String lngText = getString("language");
             if (!lngText.equalsIgnoreCase("language")) lngText += " (language)";
@@ -538,6 +547,17 @@ public class Main {
                 CHAT_FRAME = new ChatFrame();
                 Rectangle r = CONFIG.getFrameBounds();
                 if (r != null) CHAT_FRAME.setBounds(r);
+                if (!SystemTrayIcon.isSupported()) {
+                    CHAT_FRAME.setDefaultCloseOperation(ChatFrame.DO_NOTHING_ON_CLOSE);
+                    CHAT_FRAME.addWindowListener(new WindowAdapter() {
+
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            AL_EXIT.actionPerformed(null);
+                        }
+
+                    });
+                }
                 CHAT_FRAME.addComponentListener(new ComponentAdapter() {
 
                     @Override

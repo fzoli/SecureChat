@@ -165,9 +165,21 @@ public class SystemTrayIcon {
      * @throws NullPointerException ha a kép null
      */
     public static void setIcon(String tooltip, BufferedImage img) {
+        setIcon(tooltip, img, null);
+    }
+    
+    /**
+     * Beállítja a paraméterben átadott szöveget és ikont, ha támogatva vannak a rendszerikonok.
+     * @param tooltip a megjelenő szöveg, amikor az egér az ikon felett van
+     * @param img az a kép, ami megjelenik az ikonban
+     * @param onClick ikonra való dupla kattintást kezeli le
+     * @throws NullPointerException ha a kép null
+     */
+    public static void setIcon(String tooltip, BufferedImage img, Runnable onClick) {
         if (isSupported()) {
             icon.setToolTip(tooltip);
             icon.setImage(img);
+            if (onClick != null) icon.setOnClickListener(onClick);
         }
     }
     
