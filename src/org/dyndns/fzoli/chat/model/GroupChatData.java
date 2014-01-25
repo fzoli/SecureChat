@@ -47,7 +47,9 @@ public class GroupChatData extends Data<GroupChatData, GroupChatPartialData> {
         if (to != null) {
             to.clear();
             if (from != null) {
-                to.addAll(from);
+                for (T o : from) {
+                    to.add(o);
+                }
             }
         }
     }

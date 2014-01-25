@@ -11,6 +11,8 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -36,6 +38,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import org.dyndns.fzoli.chat.client.ClientSideGroupChatData;
+import org.dyndns.fzoli.chat.client.Main;
 import org.dyndns.fzoli.chat.model.UserData;
 import org.dyndns.fzoli.ui.FixedStyledEditorKit;
 import org.dyndns.fzoli.ui.ScrollingDocumentListener;
@@ -351,6 +354,10 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      */
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
     
+    private JScrollPane paneSender;
+    
+    private Integer msgKey = null;
+    
     /**
      * Az üzenetkijelző és üzenetküldő panel.
      */
@@ -359,7 +366,15 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             setBackground(COLOR_BG);
             setLayout(new BorderLayout());
             
-            tpMessages = new JTextPane();
+            tpMessages = new JTextPane() {
+
+                @Override
+                public void paint(Graphics g) {
+                    if (!freeze) super.paint(g);
+                }
+                
+            };
+            
             tpMessages.setBackground(getBackground());
             tpMessages.setFocusable(false);
             tpMessages.setEditable(false);
@@ -383,6 +398,39 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             StyleConstants.setForeground(sysname, Color.BLACK);
             
             final JTextArea tpSender = new JTextArea();
+            tpSender.addKeyListener(new KeyAdapter() {
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (rewriteAction(e)) {
+                        List<ChatMessage> l = Main.DATA.getMessages();
+                        for (int i = l.size() - 1; i >= 0; i--) {
+                            ChatMessage msg = l.get(i);
+                            if (senderName != null && senderName.equals(msg.getSender())) {
+                                msgKey = msg.getID();
+                                tpSender.setText(msg.getMessage());
+                                paneSender.setBackground(Color.GREEN);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    if (!rewriteAction(e)) {
+                        if (tpSender.getText().isEmpty()) {
+                            msgKey = null;
+                            paneSender.setBackground(COLOR_BG);
+                        }
+                    }
+                }
+                
+                private boolean rewriteAction(KeyEvent e) {
+                    return e.isControlDown() && e.getKeyCode() == KeyEvent.VK_UP;
+                }
+                
+            });
             tpSender.setBackground(getBackground());
             tpSender.setLineWrap(true);
             tpSender.setDocument(new PlainDocument() {
@@ -407,7 +455,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             
             ScrollingDocumentListener.apply(tpMessages, paneMessages);
             
-            final JScrollPane paneSender = new JScrollPane(tpSender);
+            paneSender = new JScrollPane(tpSender);
             paneSender.setBorder(null);
             paneSender.setViewportBorder(BorderFactory.createEtchedBorder());
             paneSender.setMinimumSize(minSize);
@@ -427,7 +475,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 public void actionPerformed(ActionEvent e) {
                     ScrollingDocumentListener.scrollToBottom(tpMessages); // scrollozás az üzenetek végére
                     if (!tpSender.getText().trim().isEmpty()) {
-                        ClientSideGroupChatData.sendMessage(new ChatMessage(tpSender.getText())); // üzenet elküldése
+                        ClientSideGroupChatData.sendMessage(new ChatMessage(tpSender.getText(), msgKey)); // üzenet elküldése
                         tpSender.setText(""); // üzenetkülső panel kiürítése
                     }
                 }
@@ -458,7 +506,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     /**
      * A rendszerüzenetek dátumait tartalmazó lista.
      */
-    private List<Date> sysDates = Collections.synchronizedList(new ArrayList<Date>());
+    private final List<Date> sysDates = Collections.synchronizedList(new ArrayList<Date>());
     
     /**
      * Rendszerüzenet típus.
@@ -497,6 +545,11 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      * @param sys true esetén csak rendszerüzenetet cserél
      */
     private void replace(String from, String to, int start, boolean sys) {
+//        Enumeration<UserData> e = ((UserListModel) LIST_USERS.getModel()).elements();
+//        while (e.hasMoreElements()) {
+//            String fullName = e.nextElement().getFullName();
+//            if (fullName.equals(from)) return; // felhasználónév nem írható át soha! (még akkor sem, ha az az üzenet)
+//        }
         synchronized (DOC_LOCK) {
             try {
                 String s = doc.getText(0, doc.getLength()); // az üzenetek teljes szövege
@@ -723,6 +776,23 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 ;
             }
         }
+    }
+
+    boolean freeze = false;
+    
+    public void replaceChatMessages(List<ChatMessage> l) {
+        freeze = true;
+        try {
+            removeChatMessages();
+            for (ChatMessage m : l) {
+                addChatMessage(m);
+            }
+        }
+        catch (Exception ex) {
+            ;
+        }
+        freeze = false;
+        tpMessages.repaint();
     }
     
     /**

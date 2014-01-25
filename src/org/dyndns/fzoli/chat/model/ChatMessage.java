@@ -97,7 +97,7 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
     @Override
     public void apply(ChatMessage d) {
         if (equals(d)) {
-            setMessage(d.getMessage());
+            d.setMessage(getMessage());
         }
     }
 

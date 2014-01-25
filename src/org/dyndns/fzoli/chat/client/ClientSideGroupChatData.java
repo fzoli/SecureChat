@@ -59,6 +59,7 @@ public class ClientSideGroupChatData extends GroupChatData {
         @Override
         public void setMessage(String msg) {
             super.setMessage(msg);
+            CHAT_FRAME.replaceChatMessages(Main.DATA.getMessages());
         }
         
     }
@@ -67,7 +68,7 @@ public class ClientSideGroupChatData extends GroupChatData {
 
         @Override
         public boolean add(UserData e) {
-            boolean b = super.add(e);
+            boolean b = super.add(new ClientSideUserData(e));
             if (b) CHAT_FRAME.setUserVisible(e, true, false);
             return b;
         }
@@ -84,7 +85,7 @@ public class ClientSideGroupChatData extends GroupChatData {
 
         @Override
         public boolean add(ChatMessage e) {
-            boolean b = super.add(e);
+            boolean b = super.add(new ClientSideChatMessage(e));
             if (b) CHAT_FRAME.addChatMessage(e);
             return b;
         }
@@ -103,15 +104,8 @@ public class ClientSideGroupChatData extends GroupChatData {
 
     @Override
     public void update(GroupChatData d) {
+        super.update(d);
         if (d != null) {
-            getUsers().clear();
-            getMessages().clear();
-            for (UserData ud : d.getUsers()) {
-                getUsers().add(new ClientSideUserData(ud));
-            }
-            for (ChatMessage cm : d.getMessages()) {
-                getMessages().add(new ClientSideChatMessage(cm));
-            }
             CHAT_FRAME.setVisible(true);
         }
     }
