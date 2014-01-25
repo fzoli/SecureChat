@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import org.dyndns.fzoli.chat.model.ChatMessage;
 import org.dyndns.fzoli.chat.model.GroupChatData;
+import org.dyndns.fzoli.chat.model.GroupChatPartialListData;
 import org.dyndns.fzoli.chat.model.UserData;
 import org.dyndns.fzoli.chat.model.UserPartialDateData;
 import org.dyndns.fzoli.chat.model.UserPartialIntData;
@@ -19,6 +20,29 @@ import org.dyndns.fzoli.socket.process.impl.MessageProcess;
  */
 public class ServerSideGroupChatData extends GroupChatData {
 
+    public enum CommandMessage {
+        
+        CLEAR("/clear");
+        
+        private final String MSG;
+        
+        private CommandMessage(String msg) {
+            MSG = msg;
+        }
+
+        public String getMessage() {
+            return MSG;
+        }
+        
+        public static CommandMessage findMessage(String msg) {
+            for (CommandMessage cm : values()) {
+                if (cm.getMessage().equalsIgnoreCase(msg)) return cm;
+            }
+            return null;
+        }
+        
+    }
+    
     public static class ServerSideUserData extends UserData {
 
         public ServerSideUserData(String userName, String fullName) {
@@ -91,6 +115,12 @@ public class ServerSideGroupChatData extends GroupChatData {
         public boolean add(ChatMessage e) {
             sendMessage(new ChatMessage(e));
             return super.add(e);
+        }
+
+        @Override
+        public void clear() {
+            super.clear();
+            sendMessage(new GroupChatPartialListData(ChatMessage.class, this));
         }
         
     }

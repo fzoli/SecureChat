@@ -43,7 +43,7 @@ public class GroupChatData extends Data<GroupChatData, GroupChatPartialData> {
         MESSAGES.clear();
     }
     
-    private <T> void replace(List<T> to, List<T> from) {
+    public static <T> void replace(List<T> to, List<T> from) {
         if (to != null) {
             to.clear();
             if (from != null) {
@@ -53,6 +53,19 @@ public class GroupChatData extends Data<GroupChatData, GroupChatPartialData> {
             }
         }
     }
+    
+//    public static <T> void replace(Class<? super T> clazz, List<T> to, List<?> from) {
+//        if (to != null) {
+//            to.clear();
+//            if (clazz != null && from != null) {
+//                for (Object o : from) {
+//                    if (o != null && clazz.isInstance(o)) {
+//                        to.add((T) o);
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     public static ChatMessage findChatMsg(List<ChatMessage> c, Integer id) {
         for (ChatMessage m : c) {
