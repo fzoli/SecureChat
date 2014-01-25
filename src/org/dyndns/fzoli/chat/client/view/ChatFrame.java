@@ -780,9 +780,10 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     
     public void addChatMessage(ChatMessage msg) {
         if (msg != null) {
-            UserListModel model = (UserListModel) LIST_USERS.getModel();
-            UserData ud = model.findUserData(msg.getSender());
-            String sender = ud == null ? msg.getSender() : ud.getFullName();
+//            UserListModel model = (UserListModel) LIST_USERS.getModel();
+//            UserData ud = model.findUserData(msg.getSender());
+//            String sender = ud == null ? msg.getSender() : ud.getFullName();
+            String sender = msg.getFullName();
             addMessage(msg.getDate(), sender, msg.getMessage());
         }
     }

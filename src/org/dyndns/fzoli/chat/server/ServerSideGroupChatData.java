@@ -71,8 +71,8 @@ public class ServerSideGroupChatData extends GroupChatData {
     
     public static class ServerSideChatMessage extends ChatMessage {
         
-        public ServerSideChatMessage(String sender, String msg) {
-            super(sender, msg);
+        public ServerSideChatMessage(String sender, String fullName, String msg) {
+            super(sender, fullName, msg);
         }
 
         @Override

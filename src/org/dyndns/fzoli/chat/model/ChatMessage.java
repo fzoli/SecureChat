@@ -22,7 +22,7 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
     /**
      * Az üzenet küldőjének felhasználóneve.
      */
-    private final String SENDER;
+    private final String SENDER, FULL_NAME;
     
     /**
      * Az üzenet első küldésének dátuma.
@@ -43,6 +43,7 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
     public ChatMessage(String msg, Integer id) {
         super(msg);
         SENDER = null;
+        FULL_NAME = null;
         DATE = null;
         ID = id;
     }
@@ -50,9 +51,10 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
     /**
      * Szerver oldal - kliens által fogadott új üzenet.
      */
-    public ChatMessage(String sender, String msg) {
+    public ChatMessage(String sender, String fullName, String msg) {
         super(msg);
         SENDER = sender;
+        FULL_NAME = fullName;
         DATE = new Date();
         ID = ID_INCREMENTER++;
     }
@@ -63,6 +65,7 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
     public ChatMessage(ChatMessage cm, String msg) {
         super(msg);
         SENDER = cm.getSender();
+        FULL_NAME = cm.getFullName();
         DATE = cm.getDate();
         ID = cm.getID();
     }
@@ -80,6 +83,10 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
 
     public String getSender() {
         return SENDER;
+    }
+
+    public String getFullName() {
+        return FULL_NAME == null ? SENDER : FULL_NAME;
     }
 
     public Date getDate() {

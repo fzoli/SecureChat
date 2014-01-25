@@ -59,7 +59,7 @@ public class ChatServerMessageProcess extends MessageProcess {
                              }
                          }
                          else { // új chat üzenetet küld a kliens
-                             DATA.getMessages().add(new ServerSideGroupChatData.ServerSideChatMessage(getRemoteCommonName(), cm.getMessage())); // szerver oldali üzenet létrehozása és küldése a klienseknek
+                             DATA.getMessages().add(new ServerSideGroupChatData.ServerSideChatMessage(getRemoteCommonName(), getRemoteFullName(), cm.getMessage())); // szerver oldali üzenet létrehozása és küldése a klienseknek
                          }
                      }
                  }

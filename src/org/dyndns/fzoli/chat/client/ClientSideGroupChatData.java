@@ -15,7 +15,6 @@ import static org.dyndns.fzoli.chat.client.Main.CHAT_FRAME;
 /**
  * TODO:
  * - szerver oldalon van egy bug, ami miatt több kliens is disconnectálódik amikor egy kliens lekapcsolódik a szerverről
- * - a ChatMessage osztály sender tulajdonságát váltsa fel String helyett a UserData objektum, hogy az offline userek üzenetei is teljes névvel jelenhessenek meg
  * - ha az átírt üzenet egyezik a régivel, ne küldje el a kliens
  * - az üzenetek átírásakor a rendszerüzenetek eltünnek, mert azok nem tényleges üzenetek:
  *   a kliensnek tárolni kéne a rendszerüzeneteket és amikor a listát tölti fel idő alapján rendezve a rendszerüzeneteket is hozzáadni
