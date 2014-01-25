@@ -68,6 +68,11 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         public boolean contains(Object elem) {
             return findUserData(elem) != null;
         }
+
+        @Override
+        public boolean removeElement(Object obj) {
+            return super.removeElement(findUserData(obj));
+        }
         
         public UserData findUserData(Object elem) {
             if (elem instanceof UserData) {
@@ -147,6 +152,11 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 }
                 
             });
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            if (!freezeUsr) super.paint(g);
         }
         
         /**
@@ -370,7 +380,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
 
                 @Override
                 public void paint(Graphics g) {
-                    if (!freeze) super.paint(g);
+                    if (!freezeMsg) super.paint(g);
                 }
                 
             };
@@ -652,6 +662,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      * @param visible true esetén hozzáadás, egyébként eltávolítás
      */
     public void setUserVisible(UserData ud, boolean visible, boolean notify) {
+        freezeUsr = true;
         DefaultListModel<UserData> model = (DefaultListModel) LIST_USERS.getModel();
         if ((visible && model.contains(ud)) || (!visible && model.contains(ud))) {
             model.removeElement(ud);
@@ -669,6 +680,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 model.addElement(s);
             }
         }
+        freezeUsr = false;
         LIST_USERS.invalidate();
         if (notify) {
             showSysMessage(visible ? ud.getSignInDate() : ud.getSignOutDate(), ud.getFullName(), visible ? SYS_CONNECT : SYS_DISCONNECT);
@@ -778,10 +790,10 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         }
     }
 
-    boolean freeze = false;
+    boolean freezeMsg = false, freezeUsr = false;
     
     public void replaceChatMessages(List<ChatMessage> l) {
-        freeze = true;
+        freezeMsg = true;
         try {
             removeChatMessages();
             for (ChatMessage m : l) {
@@ -791,7 +803,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         catch (Exception ex) {
             ;
         }
-        freeze = false;
+        freezeMsg = false;
         tpMessages.repaint();
     }
     
