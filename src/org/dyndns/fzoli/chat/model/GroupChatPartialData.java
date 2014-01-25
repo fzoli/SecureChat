@@ -1,6 +1,7 @@
 package org.dyndns.fzoli.chat.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -19,6 +20,7 @@ public abstract class GroupChatPartialData<D extends BaseData, T extends Seriali
     public int apply(Collection<D> datas) {
         int count = 0;
         if (datas != null) {
+            datas = new ArrayList<D>(datas); // az apply metódus meghívhatja az eredeti datas paraméterben kapott kollekción az add vagy remove utasítást, így nem lehet iterálni az eredeti kollekción
             for (D data : datas) {
                 if (equals(data)) {
                     apply(data);

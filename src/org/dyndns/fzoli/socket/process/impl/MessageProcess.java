@@ -256,7 +256,8 @@ public abstract class MessageProcess extends AbstractSecureProcess {
             final ObjectInput in = method.createObjectInput(getSocket().getInputStream());
             while (!getSocket().isClosed()) { // ... és várakozás üzenetre amíg él a kapcsolat
                 Object o = in.readObject();
-                if (o instanceof Serializable) onMessage((Serializable) o); // megkapott üzenet feldolgozása
+                if (o != null && o instanceof Serializable) onMessage((Serializable) o); // megkapott üzenet feldolgozása
+                if (o == null) break; // stream vége
             }
         }
         catch (Exception ex) {

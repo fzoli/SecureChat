@@ -42,7 +42,9 @@ public class JsonInputStream extends InputStream implements ObjectInput {
      */
     @Override
     public Object readObject() throws ClassNotFoundException, IOException {
-        Class<?> classType = Class.forName(in.readLine());
+        String s = in.readLine();
+        if (s == null) return null; // stream vége
+        Class<?> classType = Class.forName(s);
         String line;
         StringBuffer sb = new StringBuffer();
         while (!(line = in.readLine()).isEmpty()) {
