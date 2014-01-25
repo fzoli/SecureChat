@@ -13,7 +13,18 @@ import org.dyndns.fzoli.socket.process.impl.MessageProcess;
 import static org.dyndns.fzoli.chat.client.Main.CHAT_FRAME;
 
 /**
- *
+ * TODO:
+ * - szerver oldalon van egy bug, ami miatt több kliens is disconnectálódik amikor egy kliens lekapcsolódik a szerverről
+ * - a ChatMessage osztály sender tulajdonságát váltsa fel String helyett a UserData objektum, hogy az offline userek üzenetei is teljes névvel jelenhessenek meg
+ * - ha az átírt üzenet egyezik a régivel, ne küldje el a kliens
+ * - az üzenetek átírásakor a rendszerüzenetek eltünnek, mert azok nem tényleges üzenetek:
+ *   a kliensnek tárolni kéne a rendszerüzeneteket és amikor a listát tölti fel idő alapján rendezve a rendszerüzeneteket is hozzáadni
+ * - ha rejtve van az ablak és üzenet érkezik, jelezze a rendszerikon
+ * - ha rejtve van az ablak és megszakad a kapcsolat, ne jöjjön fel a kapcsolódáskezelő ablak, de
+ *   ha a kapcsolat megszakadt vagy folyamatban van, jelezze a rendszerikon
+ * - ha a chat ablak látható és disconnect történik, ne tűnjön el, csak legyen disabled az üzenet írására szolgáló input mező
+ *   (lehet nincs is szükség a kapcsolódáskezelő ablakra, csak akkor ha a system tray nincs támogatva)
+ * - beállításokba minimalizált indítás opció: ez esetben semmi ablak nem jelenik meg induláskor és a splash screen is eltűnik amint a system tray ikon megjelenik
  * @author zoli
  */
 public class ClientSideGroupChatData extends GroupChatData {

@@ -410,34 +410,57 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             final JTextArea tpSender = new JTextArea();
             tpSender.addKeyListener(new KeyAdapter() {
 
+                private Integer prevKey;
+                
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    if (rewriteAction(e)) {
+                    if (isRewriteAction(e, true)) {
                         List<ChatMessage> l = Main.DATA.getMessages();
                         for (int i = l.size() - 1; i >= 0; i--) {
                             ChatMessage msg = l.get(i);
-                            if (senderName != null && senderName.equals(msg.getSender())) {
-                                msgKey = msg.getID();
-                                tpSender.setText(msg.getMessage());
-                                paneSender.setBackground(Color.GREEN);
-                                break;
+                            if (msg.getID() != null && senderName != null && senderName.equals(msg.getSender())) {
+                                loadBack(msg);
+                                if (prevKey == null || prevKey > msg.getID()) break;
                             }
                         }
+                        prevKey = msgKey;
+                    }
+                    else if (isRewriteAction(e, false) && msgKey != null) {
+                        List<ChatMessage> l = Main.DATA.getMessages();
+                        for (int i = 0; i < l.size(); i++) {
+                            ChatMessage msg = l.get(i);
+                            if (msg.getID() == null || msg.getID() <= msgKey) continue;
+                            if (senderName != null && senderName.equals(msg.getSender())) {
+                                loadBack(msg);
+                                if (prevKey == null || prevKey < msg.getID()) break;
+                            }
+                        }
+                        prevKey = msgKey;
                     }
                 }
 
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    if (!rewriteAction(e)) {
+                    if (!isRewriteAction(e, true) && !isRewriteAction(e, false)) {
                         if (tpSender.getText().isEmpty()) {
-                            msgKey = null;
-                            paneSender.setBackground(COLOR_BG);
+                            cancelRewrite();
                         }
                     }
                 }
                 
-                private boolean rewriteAction(KeyEvent e) {
-                    return e.isControlDown() && e.getKeyCode() == KeyEvent.VK_UP;
+                private boolean isRewriteAction(KeyEvent e, boolean reverse) {
+                    return e.isControlDown() && e.getKeyCode() == (reverse ? KeyEvent.VK_UP : KeyEvent.VK_DOWN);
+                }
+                
+                private void loadBack(ChatMessage msg) {
+                    msgKey = msg.getID();
+                    tpSender.setText(msg.getMessage());
+                    paneSender.setBackground(Color.GREEN);
+                }
+                
+                private void cancelRewrite() {
+                    msgKey = prevKey = null;
+                    paneSender.setBackground(COLOR_BG);
                 }
                 
             });
@@ -457,7 +480,15 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             
             Dimension minSize = new Dimension(200, 32);
             
-            final JScrollPane paneMessages = new JScrollPane(tpMessages);
+            final JScrollPane paneMessages = new JScrollPane(tpMessages) {
+
+                @Override
+                public void paint(Graphics g) {
+                    if (!freezeMsg) super.paint(g);
+                }
+                
+            };
+            
             paneMessages.setBorder(null);
             paneMessages.setViewportBorder(BorderFactory.createEtchedBorder());
             paneMessages.setMinimumSize(minSize);
