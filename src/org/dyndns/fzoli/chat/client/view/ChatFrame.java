@@ -3,6 +3,7 @@ package org.dyndns.fzoli.chat.client.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -13,9 +14,12 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URI;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,9 +28,12 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.plaf.metal.MetalToolTipUI;
@@ -357,7 +364,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                                 KEY_NAME = "name",
                                 KEY_MYNAME = "myname",
                                 KEY_SYSNAME = "sysname",
-                                KEY_REGULAR = "regualar";
+                                KEY_REGULAR = "regualar",
+                                KEY_URL = "url";
     
     /**
      * Dátumformázó a chatüzenetek elküldésének idejének kijelzésére.
@@ -390,12 +398,58 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             tpMessages.setEditable(false);
             tpMessages.setEditorKit(new FixedStyledEditorKit());
             
+            tpMessages.addMouseListener(new MouseAdapter() {
+
+                private String getUrl(MouseEvent e) {
+                    int i = tpMessages.viewToModel(e.getPoint()); // a kattintást szöveg indexre konvertálja
+                    String fullText = tpMessages.getText();
+                    Matcher matcher = URL_PATTERN.matcher(fullText);
+                    String selectedUrl = null;
+                    while (matcher.find()) {
+                        if (matcher.start() <= i && matcher.end() >= i) {
+                            selectedUrl = fullText.substring(matcher.start(), matcher.end());
+                            break;
+                        }
+                    }
+                    return selectedUrl;
+                }
+                
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String url = getUrl(e);
+                    if (url != null) {
+                        openWebpage(url);
+                    }
+                }
+                
+//                    String line = "";
+//                    int begin = 0, end = 0;
+//                    while (true) { // megkeresi azt a sort, amire kattintottak
+//                        if (end > 0) begin = tpMessages.getText().indexOf('\n', begin + 1);
+//                        if (begin == -1) break;
+//                        end = Math.min(tpMessages.getText().length() - 1, tpMessages.getText().indexOf('\n', begin + 1));
+//                        if (end == -1) end = tpMessages.getText().length();
+//                        if (begin <= i && end >= i) try {
+//                            line = doc.getText(begin, end - begin).trim(); // találat
+//                            break;
+//                        }
+//                        catch (Exception ex) {
+//                            ;
+//                        }
+//                    }
+                
+            });
+            
             doc = tpMessages.getStyledDocument();
             Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
             Style regular = doc.addStyle(KEY_REGULAR, def);
             
             Style date = doc.addStyle(KEY_DATE, regular);
             StyleConstants.setForeground(date, Color.GRAY);
+            
+            Style url = doc.addStyle(KEY_URL, regular);
+            StyleConstants.setForeground(url, Color.BLUE);
+            StyleConstants.setUnderline(url, true);
             
             Style name = doc.addStyle(KEY_NAME, regular);
             StyleConstants.setBold(name, true);
@@ -529,6 +583,27 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         }
     };
     
+    private static void openWebpage(URI uri) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(uri);
+            }
+            catch (Exception e) {
+                ;
+            }
+        }
+    }
+
+    private static void openWebpage(String url) {
+        try {
+            openWebpage(new URL(url).toURI());
+        }
+        catch (Exception e) {
+            ;
+        }
+    }
+    
     /**
      * Az utolsó üzenetküldő neve.
      */
@@ -542,7 +617,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     /**
      * A használt rendszerüzenetek típusai és szövegük.
      */
-    private Map<Integer, String> sysMessages = Collections.synchronizedMap(new HashMap<Integer, String>());
+    private final Map<Integer, String> sysMessages = Collections.synchronizedMap(new HashMap<Integer, String>());
     
     /**
      * A rendszerüzenetek dátumait tartalmazó lista.
@@ -800,6 +875,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      */
     private final Object DOC_LOCK = new Object();
     
+    private final Pattern URL_PATTERN = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    
     /**
      * Chatüzenetet illetve rendszerüzenetet jelenít meg és a scrollt beállítja.
      * @param date az üzenet elküldésének ideje
@@ -815,9 +892,36 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 if (me) message = message.substring(4);
                 me |= sysmsg;
                 boolean startNewline = message.indexOf("\n") == 0; // ha új sorral kezdődik az üzenet, egy újsor jel bent marad
+                message = message.trim();
+                
+                Matcher matcher = URL_PATTERN.matcher(message);
+                Map<String, String> messages = new LinkedHashMap<String, String>();
+                int end = -1;
+                while (matcher.find()) {
+                    int start = matcher.start();
+                    String bs = message.substring(Math.max(0, end), start);
+                    if (!bs.isEmpty()) messages.put(bs, KEY_REGULAR);
+                    end = matcher.end();
+                    messages.put(message.substring(start, end), KEY_URL);
+                }
+                if (messages.isEmpty()) {
+                    messages.put(message, KEY_REGULAR);
+                }
+                else if (end < message.length()) {
+                    messages.put(message.substring(end), KEY_REGULAR);
+                }
+                
+                Iterator<Entry<String, String>> it = messages.entrySet().iterator();
+                Entry<String, String> first = it.next();
                 doc.insertString(doc.getLength(), (doc.getLength() > 0 ? "\n" : "") + '[' + DATE_FORMAT.format(date) + "] ", doc.getStyle(KEY_DATE));
                 doc.insertString(doc.getLength(), (me ? ("* " + name) : (name.equals(lastSender) ? "..." : (name + ':'))) + ' ', doc.getStyle(sysmsg ? KEY_SYSNAME : isSenderName(name) ? KEY_MYNAME : KEY_NAME));
-                doc.insertString(doc.getLength(), (!me && startNewline ? "\n" : "") + message.trim(), doc.getStyle(KEY_REGULAR));
+                doc.insertString(doc.getLength(), (!me && startNewline ? "\n" : "") + first.getKey(), doc.getStyle(first.getValue()));
+                while (it.hasNext()) {
+                    Entry<String, String> e = it.next();
+                    doc.insertString(doc.getLength(), e.getKey(), doc.getStyle(e.getValue()));
+                }
+                messages.clear();
+                
                 lastSender = me ? "" : name;
             }
             catch (Exception ex) {
@@ -898,14 +1002,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 u2.setFullName("Második tesztelő");
                 u2.setSignInDate(new Date());
                 d.setUserVisible(u2, true, false);
-                d.addWindowListener(new WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        System.exit(0);
-                    }
-                    
-                });
+                d.addMessage(new Date(), "test1", "Ez az üzenet egy http://example.com/asd URL-t tartalmaz, melyre kattintva megjelenik az alapértelmezett böngésző.");
+                d.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 d.setLocationRelativeTo(d);
                 d.setVisible(true);
             }

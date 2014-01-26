@@ -14,6 +14,8 @@ import static org.dyndns.fzoli.chat.client.Main.CHAT_FRAME;
 
 /**
  * TODO:
+ * - a kapcsolódáskezelő ablak újrakapcsolódás esetén néha a megszakadt a kapcsolat szöveget mutatja
+ * - a kapcsolódáskezelő ablak néha újra megjelenik sikertelen kapcsolódással miközben a beállítások ablakot (kapcsolódás alatt) megnyitják
  * - ha rejtve van az ablak és üzenet érkezik, jelezze a rendszerikon
  * - ha rejtve van az ablak és megszakad a kapcsolat, ne jöjjön fel a kapcsolódáskezelő ablak, de
  *   ha a kapcsolat megszakadt vagy folyamatban van, jelezze a rendszerikon
