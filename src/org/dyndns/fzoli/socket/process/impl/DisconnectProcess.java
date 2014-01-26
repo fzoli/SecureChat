@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.dyndns.fzoli.socket.handler.SecureHandler;
