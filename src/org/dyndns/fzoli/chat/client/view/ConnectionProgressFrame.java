@@ -131,6 +131,8 @@ public class ConnectionProgressFrame extends AbstractConnectionProgressFrame imp
         }
     }
     
+    private final Object LOCK = new Object();
+    
     /**
      * Beállítja a megjelenő panelt és az Újra gombot.
      * Az Újra gomb tiltva lesz {@code Status.CONNECTING} státusz esetén.
@@ -139,16 +141,18 @@ public class ConnectionProgressFrame extends AbstractConnectionProgressFrame imp
      * @param miReconn újrakapcsolódás opció a rendszerikon menüjében
      */
     public void setStatus(Status status, MenuItem miReconn) {
-        if (status != null) {
-            boolean enabled = status != Status.CONNECTING;
-            if (miReconn != null) miReconn.setEnabled(enabled);
-            setAgainButtonEnabled(enabled);
-            setIconTextPanel(status.ordinal());
+        synchronized (LOCK) {
+            if (status != null) {
+                boolean enabled = status != Status.CONNECTING;
+                if (miReconn != null) miReconn.setEnabled(enabled);
+                setAgainButtonEnabled(enabled);
+                setIconTextPanel(status.ordinal());
+            }
+            else {
+                if (miReconn != null) miReconn.setEnabled(true);
+            }
+            setVisible(status != null);
         }
-        else {
-            if (miReconn != null) miReconn.setEnabled(true);
-        }
-        setVisible(status != null);
     }
     
     /**

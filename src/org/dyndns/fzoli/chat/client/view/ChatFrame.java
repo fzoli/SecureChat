@@ -16,8 +16,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -789,6 +787,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         }
         freezeUsr = false;
         LIST_USERS.invalidate();
+        LIST_USERS.repaint();
         if (notify) {
             showSysMessage(visible ? ud.getSignInDate() : ud.getSignOutDate(), ud.getFullName(), visible ? SYS_CONNECT : SYS_DISCONNECT);
         }
