@@ -670,6 +670,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             try {
                 lastSender = null;
                 sysMessages.clear();
+                SYS_MESSAGES.clear();
                 doc.remove(0, doc.getLength());
             }
             catch (BadLocationException ex) {
@@ -733,6 +734,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         ChatFrame.senderName = senderName;
     }
     
+    private final List<ChatMessage> SYS_MESSAGES = new ArrayList<ChatMessage>();
+    
     /**
      * Megjeleníti a kért rendszerüzenetet.
      * @param d az esemény ideje
@@ -742,6 +745,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     private void showSysMessage(Date d, String name, int type) {
         String s = getSysText(type, null);
         if (s != null) {
+            SYS_MESSAGES.add(new ChatMessage(type, d, name, name, null));
             addMessage(d, name, s, true);
             sysMessages.put(type, s);
             sysDates.add(d);
@@ -827,10 +831,30 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     public void replaceChatMessages(List<ChatMessage> l) {
         freezeMsg = true;
         try {
+            List<ChatMessage> sysmsgs = new ArrayList<ChatMessage>(SYS_MESSAGES);
             removeChatMessages();
             for (ChatMessage m : l) {
-                addChatMessage(m);
+                if (m.getDate() != null) {
+                    Iterator<ChatMessage> si = sysmsgs.iterator();
+                    while (si.hasNext()) {
+                        ChatMessage sm = si.next();
+                        if (sm.getDate() != null) {
+                            if (sm.getDate().before(m.getDate())) {
+                                showSysMessage(sm.getDate(), sm.getFullName(), sm.getID());
+                                si.remove();
+                            }
+                        }
+                        else {
+                            si.remove();
+                        }
+                    }
+                    addChatMessage(m);
+                }
             }
+            for (ChatMessage sm : sysmsgs) {
+                showSysMessage(sm.getDate(), sm.getFullName(), sm.getID());
+            }
+            sysmsgs.clear();
         }
         catch (Exception ex) {
             ;

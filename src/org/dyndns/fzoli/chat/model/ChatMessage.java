@@ -41,33 +41,21 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
      * Kliens oldal - üzenet módosítására.
      */
     public ChatMessage(String msg, Integer id) {
-        super(msg);
-        SENDER = null;
-        FULL_NAME = null;
-        DATE = null;
-        ID = id;
+        this(id, null, null, null, msg);
     }
     
     /**
      * Szerver oldal - kliens által fogadott új üzenet.
      */
     public ChatMessage(String sender, String fullName, String msg) {
-        super(msg);
-        SENDER = sender;
-        FULL_NAME = fullName;
-        DATE = new Date();
-        ID = ID_INCREMENTER++;
+        this(ID_INCREMENTER++, new Date(), sender, fullName, msg);
     }
 
     /**
      * Szerver oldal - kliens által fogadott átírt üzenet.
      */
     public ChatMessage(ChatMessage cm, String msg) {
-        super(msg);
-        SENDER = cm.getSender();
-        FULL_NAME = cm.getFullName();
-        DATE = cm.getDate();
-        ID = cm.getID();
+        this(cm.getID(), cm.getDate(), cm.getSender(), cm.getFullName(), cm.getMessage());
     }
     
     /**
@@ -75,6 +63,17 @@ public class ChatMessage extends GroupChatPartialData<ChatMessage, String> {
      */
     public ChatMessage(ChatMessage cm) {
         this(cm, cm.getMessage());
+    }
+    
+    /**
+     * Egyéb esetekre.
+     */
+    public ChatMessage(Integer id, Date date, String sender, String fullName, String msg) {
+        super(msg);
+        SENDER = sender;
+        FULL_NAME = fullName;
+        DATE = date;
+        ID = id;
     }
     
     public Integer getID() {

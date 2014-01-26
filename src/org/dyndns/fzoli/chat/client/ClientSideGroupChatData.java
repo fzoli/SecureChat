@@ -14,9 +14,6 @@ import static org.dyndns.fzoli.chat.client.Main.CHAT_FRAME;
 
 /**
  * TODO:
- * - ha az átírt üzenet egyezik a régivel, ne küldje el a kliens
- * - az üzenetek átírásakor a rendszerüzenetek eltünnek, mert azok nem tényleges üzenetek:
- *   a kliensnek tárolni kéne a rendszerüzeneteket és amikor a listát tölti fel idő alapján rendezve a rendszerüzeneteket is hozzáadni
  * - ha rejtve van az ablak és üzenet érkezik, jelezze a rendszerikon
  * - ha rejtve van az ablak és megszakad a kapcsolat, ne jöjjön fel a kapcsolódáskezelő ablak, de
  *   ha a kapcsolat megszakadt vagy folyamatban van, jelezze a rendszerikon

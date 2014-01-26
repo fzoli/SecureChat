@@ -77,6 +77,7 @@ public class ServerSideGroupChatData extends GroupChatData {
 
         @Override
         public void setMessage(String msg) {
+            if (getMessage().equals(msg)) return;
             super.setMessage(msg);
             sendMessage(new ChatMessage(this, msg));
         }
