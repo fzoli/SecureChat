@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.dyndns.fzoli.socket.handler.SecureHandler;
@@ -200,8 +201,8 @@ abstract class DisconnectProcess extends AbstractSecureProcess {
      * @throws Exception ha az írás közben bármi hiba történik
      */
     protected final void write(OutputStream out) throws Exception {
-        out.write(1); // üzenés a másik oldalnak ...
-        out.flush(); // ... azonnal
+        out.write((int)(Math.random() * 256 - 128)); // üzenés a másik oldalnak ...
+        out.flush(); // ... azonnal (véletlen bájtot, hogy az esetleges lehallgatót megtévessze)
     }
     
     /**
