@@ -66,6 +66,12 @@ public abstract class AbstractSecureServerHandler extends AbstractServerHandler 
     }
 
     /**
+     * Annak érdekében, hogy az azonos időben kapcsolódó kliensek (azonos felhasználónévvel) ne kapjanak egyező kapcsolatazonosítót,
+     * nem lehet egy időben megállapítani mindkét kliens azonosítóját.
+     */
+    private static final Object COUNTER_LOCK = new Object();
+    
+    /**
      * Megszerzi a helyi és távoli tanúsítvány Common Name és Name mezőjét és ellenőrzi a tanúsítványt.
      * @throws SecureHandlerException ha nem megbízható vagy hibás bármelyik tanúsítvány
      * @throws MultipleCertificateException ha ugyan azzal a tanúsítvánnyal több kliens is kapcsolódik
@@ -75,17 +81,29 @@ public abstract class AbstractSecureServerHandler extends AbstractServerHandler 
         localCommonName = SecureHandlerUtil.getLocalCommonName(getSocket());
         remoteCommonName = SecureHandlerUtil.getRemoteCommonName(getSocket());
         if (localCommonName.equals(remoteCommonName)) throw new MultipleCertificateException("The client uses the server's name");
-        int count = 0;
-        List<SecureProcess> procs = getSecureProcesses();
-        for (SecureProcess proc : procs) {
-            if (proc.getHandler().isCertEqual(this) && !proc.getSocket().isClosed()) {
-                denyMultipleCerts();
-                count++;
+        int id = -1;
+        synchronized (COUNTER_LOCK) {
+            List<Integer> ids = new ArrayList<Integer>();
+            List<SecureProcess> procs = getSecureProcesses();
+            for (SecureProcess proc : procs) {
+                if (proc.getHandler().isCertEqual(this) && !proc.getSocket().isClosed()) {
+                    denyMultipleCerts();
+                    Integer i = getConnectionCounter(proc);
+                    if (i != null) ids.add(i);
+                }
+            }
+//            Integer maxId = ids.isEmpty() ? 0 : Collections.max(ids);
+//            id = maxId + 1;
+            for (int i = 0; i <= Integer.MAX_VALUE; i++) {
+                if (!ids.contains(i)) {
+                    id = i;
+                    break;
+                }
             }
         }
         localFullName = SecureHandlerUtil.getLocalFullName(getSocket());
         remoteFullName = SecureHandlerUtil.getRemoteFullName(getSocket());
-        return count;
+        return id;
     }
 
     protected void denyMultipleCerts() {
