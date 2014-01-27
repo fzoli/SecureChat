@@ -14,6 +14,7 @@ import static org.dyndns.fzoli.chat.client.Main.CHAT_FRAME;
 
 /**
  * TODO:
+ * - a scroll lock hatástalan (továbbra is lapoz le új üzenet esetén)
  * - a kapcsolódáskezelő ablak újrakapcsolódás esetén néha a megszakadt a kapcsolat szöveget mutatja
  * - a kapcsolódáskezelő ablak néha újra megjelenik sikertelen kapcsolódással miközben a beállítások ablakot (kapcsolódás alatt) megnyitják
  * - ha rejtve van az ablak és üzenet érkezik, jelezze a rendszerikon
