@@ -341,7 +341,7 @@ public class Main {
         if (SplashScreenLoader.isVisible()) {
             SplashScreenLoader.setSplashMessage(getString("connect_to_server"));
             setTrayConnectionAnimation(true);
-            MI_RECONNECT.setEnabled(false);
+            if (MI_RECONNECT != null) MI_RECONNECT.setEnabled(false);
         }
         else {
             showConnectionStatus(Status.CONNECTING);
@@ -542,18 +542,7 @@ public class Main {
                 };
                 PROGRESS_FRAME = new ConnectionProgressFrame(CALLBACK_EXIT);
                 CONFIG_EDITOR = new ConfigEditorFrame(CONFIG, WL_CFG);
-                if (OSUtils.isOS(OSUtils.OS.MAC) && CONFIG.needInfo()) {
-                    // Mac alatt az ablakok előtérbe kerülése nem mindig sikerül
-                    // Figyelmeztetem a felhasználót, hogy a modális dialógusok blokkolják a felületet
-                    // és ha úgy tűnik, nem válaszol a program, az ablakok elmozdításával egy háttérbe
-                    // került modális dialógusablakot találhatnak. A pozícionálási hiba oka ismeretlen...
-                    OptionPane.showMessageDialog(R.getClientImage(),
-                            getString("warn_testing1") + LS + LS +
-                            getString("warn_testing2") + LS + getString("warn_testing3") + LS +
-                            getString("warn_testing4") + LS + LS +
-                            getString("warn_testing5"), getString("warn_testing1"),
-                            OptionPane.INFORMATION_MESSAGE, true);
-                }
+                
                 if (!CONFIG.isCorrect()) { // ha a tanúsítvány fájlok egyike nem létezik
                     showSettingError(getString("warn_config_error1" + (CONFIG.isDefault() ? 'b' : 'a')) + ' ' + getString("warn_config_error2") + LS + getString("warn_config_error3"));
                     showSettingFrame(true, 1); // kényszerített beállítás és tanúsítvány lapfül előtérbe hozása
