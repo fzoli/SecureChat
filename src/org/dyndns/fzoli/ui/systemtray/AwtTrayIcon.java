@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -49,6 +50,9 @@ class AwtTrayIcon implements TrayIcon {
 
     @Override
     public void setOnClickListener(final Runnable r) {
+        for (MouseListener al : icon.getMouseListeners()) {
+            icon.removeMouseListener(al);
+        }
         if (r != null) {
             icon.addMouseListener(new MouseAdapter() {
 

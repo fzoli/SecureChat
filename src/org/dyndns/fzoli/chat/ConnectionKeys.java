@@ -44,10 +44,10 @@ public interface ConnectionKeys {
     
     /**
      * Az első időtúllépés a kapcsolatban.
-     * Időkorlát: 5 másodperc
+     * Időkorlát: 2 másodperc
      * Ajánlott érték: 1 másodperc
      */
-    int DC_TIMEOUT1 = 5000;
+    int DC_TIMEOUT1 = 2000;
     
     /**
      * A második időtúllépés.

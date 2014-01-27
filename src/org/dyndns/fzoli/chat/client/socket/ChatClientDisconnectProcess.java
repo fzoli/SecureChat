@@ -1,6 +1,7 @@
 package org.dyndns.fzoli.chat.client.socket;
 
 import org.dyndns.fzoli.chat.ConnectionKeys;
+import org.dyndns.fzoli.chat.client.Main;
 import org.dyndns.fzoli.socket.handler.SecureHandler;
 import org.dyndns.fzoli.socket.process.impl.ClientDisconnectProcess;
 import org.dyndns.fzoli.chat.client.view.ConnectionProgressFrame.Status;
@@ -41,7 +42,7 @@ public class ChatClientDisconnectProcess extends ClientDisconnectProcess impleme
     }
     
     private void setTimeout(boolean b) {
-        ;
+        Main.setTrayConnectionAnimation(b);
     }
     
 }

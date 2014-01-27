@@ -10,6 +10,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -309,6 +310,17 @@ public class Main {
         UIUtil.alert(getString("error"), text, System.err, R.getClientImage());
     }
     
+    public static void setTrayConnectionAnimation(boolean on) {
+        if (on) {
+            SystemTrayIcon.startIconAnimation(R.getConnectingIcons(), 40);
+        }
+        else {
+            BufferedImage img = R.resize(R.getClientImage(), SystemTrayIcon.getIconWidth());
+            SystemTrayIcon.stopIconAnimation();
+            SystemTrayIcon.setIcon(img);
+        }
+    }
+    
     /**
      * Figyelmeztetést küld a felhasználónak a buborékablakra.
      * Az üzenetre kattintva a kapcsolatbeállító ablak jelenik meg.
@@ -327,6 +339,7 @@ public class Main {
     private static void showConnecting() {
         if (SplashScreenLoader.isVisible()) {
             SplashScreenLoader.setSplashMessage(getString("connect_to_server"));
+//            setTrayConnectionAnimation(true);
         }
         else {
             showConnectionStatus(Status.CONNECTING);
@@ -346,6 +359,7 @@ public class Main {
         if (connecting && status != Status.CONNECTING) return;
         PROGRESS_FRAME.setStatus(status, MI_RECONNECT);
         CHAT_FRAME.setVisible(false);
+//        setTrayConnectionAnimation(status == Status.CONNECTING);
     }
     
     /**

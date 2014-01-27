@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.dyndns.fzoli.ui.LookAndFeelIcon;
+import org.dyndns.fzoli.ui.systemtray.SystemTrayIcon;
 import org.dyndns.fzoli.util.Folders;
 import org.dyndns.fzoli.util.OSUtils;
 import org.imgscalr.Scalr;
@@ -137,6 +138,17 @@ public class R {
         catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+    
+    private static BufferedImage[] CONN_ICONS = null;
+    
+    public static BufferedImage[] getConnectingIcons() {
+        if (CONN_ICONS != null) return CONN_ICONS;
+        CONN_ICONS = new BufferedImage[18];
+        for (int i = 1; i <=18; i++) {
+            CONN_ICONS[i - 1] = resize(getImage("connecting/connecting_" + i + ".png"), SystemTrayIcon.getIconWidth());
+        }
+        return CONN_ICONS;
     }
     
     /**

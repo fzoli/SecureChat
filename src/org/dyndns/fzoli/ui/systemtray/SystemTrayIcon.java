@@ -159,6 +159,15 @@ public class SystemTrayIcon {
     }
     
     /**
+     * Beállítja a paraméterben átadott ikont, ha támogatva vannak a rendszerikonok.
+     * @param img az a kép, ami megjelenik az ikonban
+     * @throws NullPointerException ha a kép null
+     */
+    public static void setIcon(BufferedImage img) {
+        setIcon(null, img, null);
+    }
+    
+    /**
      * Beállítja a paraméterben átadott szöveget és ikont, ha támogatva vannak a rendszerikonok.
      * @param tooltip a megjelenő szöveg, amikor az egér az ikon felett van
      * @param img az a kép, ami megjelenik az ikonban
@@ -177,10 +186,41 @@ public class SystemTrayIcon {
      */
     public static void setIcon(String tooltip, BufferedImage img, Runnable onClick) {
         if (isSupported()) {
-            icon.setToolTip(tooltip);
+            if (tooltip != null) icon.setToolTip(tooltip);
             icon.setImage(img);
             if (onClick != null) icon.setOnClickListener(onClick);
         }
+    }
+    
+    private static int runningAnimationId = -1;
+    
+    private static final Object LOCK = new Object();
+    
+    public static void startIconAnimation(final BufferedImage[] imgs, final int delay) {
+        if (isSupported()) {
+            final int id;
+            synchronized(LOCK) {
+                id = ++runningAnimationId;
+            }
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    while (true) {
+                        for (BufferedImage img : imgs) {
+                            if (runningAnimationId != id) return;
+                            SystemTrayIcon.setIcon(img);
+                            try { Thread.sleep(delay); } catch (Exception ex) {}
+                        }
+                    }
+                }
+
+            }).start();
+        }
+    }
+    
+    public static void stopIconAnimation() {
+        runningAnimationId = -1;
     }
     
     /**
