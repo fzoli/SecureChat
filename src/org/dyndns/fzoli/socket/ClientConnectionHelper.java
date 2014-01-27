@@ -150,6 +150,11 @@ public abstract class ClientConnectionHelper {
         throw new RuntimeException(ex.getMessage() + "; connection id: " + connectionId, ex);
     }
     
+    public void onException(AbstractSecureClientHandler h, Exception ex) {
+        state = -3;
+        onException(ex, h.getConnectionId());
+    }
+    
     /**
      * Az adott kapcsolatazonosítóval rendelkező kapcsolat létrehozása előtt ezzel a metódussal még megszakítható a kapcsolódás.
      * @return true, ha a kapcsolódás folytatódhat; egyébként false
@@ -167,6 +172,7 @@ public abstract class ClientConnectionHelper {
      * @param addListener megadja, kell-e eseményt hozzáadni
      */
     private void runHandler(int connectionId, boolean addListener) {
+        AbstractSecureClientHandler handler = null;
         try {
             if (!onCreateConnection(connectionId)) {
                 disconnect();
@@ -180,7 +186,7 @@ public abstract class ClientConnectionHelper {
                 disconnect();
                 return;
             }
-            AbstractSecureClientHandler handler = createHandler(conn, deviceId, connectionId);
+            handler = createHandler(conn, deviceId, connectionId);
             if (addListener) handler.addHandlerListener(listener);
             new Thread(handler).start();
             if (connectionId == connectionIds[connectionIds.length - 1]) {
@@ -189,7 +195,13 @@ public abstract class ClientConnectionHelper {
             }
         }
         catch (Exception ex) {
-            onException(ex, connectionId);
+            if (handler == null) {
+                state = -3;
+                onException(ex, connectionId);
+            }
+            else {
+                onException(handler, ex);
+            }
         }
     }
     

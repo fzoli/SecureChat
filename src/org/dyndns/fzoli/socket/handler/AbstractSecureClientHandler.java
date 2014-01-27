@@ -2,6 +2,7 @@ package org.dyndns.fzoli.socket.handler;
 
 import java.util.List;
 import javax.net.ssl.SSLSocket;
+import org.dyndns.fzoli.socket.ClientConnectionHelper;
 import org.dyndns.fzoli.socket.process.SecureProcess;
 
 /**
@@ -13,6 +14,8 @@ public abstract class AbstractSecureClientHandler extends AbstractClientHandler 
 
     private String localCommonName, remoteCommonName, localFullName, remoteFullName;
     
+    private final ClientConnectionHelper HELPER;
+    
     /**
      * A kliens oldali biztonságos kapcsolatkezelő konstruktora.
      * @param socket SSLSocket, amin keresztül folyik a kommunikáció.
@@ -21,9 +24,14 @@ public abstract class AbstractSecureClientHandler extends AbstractClientHandler 
      * @throws IllegalArgumentException ha az eszközazonosító vagy a kapcsolatazonosító mérete nagyobb egy bájtnál vagy negatív értékű
      */
     public AbstractSecureClientHandler(SSLSocket socket, int deviceId, int connectionId) {
-        super(socket, deviceId, connectionId);
+        this(null, socket, deviceId, connectionId);
     }
 
+    public AbstractSecureClientHandler(ClientConnectionHelper helper, SSLSocket socket, int deviceId, int connectionId) {
+        super(socket, deviceId, connectionId);
+        HELPER = helper;
+    }
+    
     /**
      * Azokat a biztonságos adatfeldolgozókat adja vissza, melyek még dolgoznak.
      */
@@ -87,10 +95,15 @@ public abstract class AbstractSecureClientHandler extends AbstractClientHandler 
      */
     @Override
     protected void onException(Exception ex) {
+        fireException(ex);
         SecureHandlerUtil.onException(ex);
         super.onException(ex);
     }
 
+    protected void fireException(Exception ex) {
+        if (HELPER != null) HELPER.onException(this, ex);
+    }
+    
     /**
      * Ha a kiválasztott Process null, fel kell dolgozni.
      * Bezárja az összes többi kapcsolatot, ami már létre lett hozva a szerverrel.

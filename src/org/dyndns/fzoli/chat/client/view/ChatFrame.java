@@ -199,6 +199,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         @Override
         public String getToolTipText(MouseEvent e) {
             int row = locationToIndex(e.getPoint());
+            if (row == -1) return null;
             if (!needToolTip(row)) return null;
             UserData o = (UserData) getModel().getElementAt(row);
             return o == null ? null : createUserText(o);
@@ -351,6 +352,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      * Az üzeneteket megjelenítő komponens.
      */
     private JTextPane tpMessages;
+    private JScrollPane spMessages;
     
     /**
      * Formázott dokumentum az üzenetek megjelenítéséhez.
@@ -538,7 +540,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             
             Dimension minSize = new Dimension(200, 32);
             
-            final JScrollPane paneMessages = new JScrollPane(tpMessages) {
+            spMessages = new JScrollPane(tpMessages) {
 
                 @Override
                 public void paint(Graphics g) {
@@ -547,12 +549,12 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 
             };
             
-            paneMessages.setBorder(null);
-            paneMessages.setViewportBorder(BorderFactory.createEtchedBorder());
-            paneMessages.setMinimumSize(minSize);
-            paneMessages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            spMessages.setBorder(null);
+            spMessages.setViewportBorder(BorderFactory.createEtchedBorder());
+            spMessages.setMinimumSize(minSize);
+            spMessages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             
-            ScrollingDocumentListener.apply(tpMessages, paneMessages);
+            ScrollingDocumentListener.apply(tpMessages, spMessages);
             
             paneSender = new JScrollPane(tpSender);
             paneSender.setBorder(null);
@@ -581,7 +583,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 
             });
             
-            add(createSplitPane(JSplitPane.VERTICAL_SPLIT, paneMessages, paneSender));
+            add(createSplitPane(JSplitPane.VERTICAL_SPLIT, spMessages, paneSender));
             
             setPreferredSize(new Dimension(490, 200 - 2 * MARGIN));
         }
@@ -960,6 +962,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         }
         freezeMsg = false;
         tpMessages.repaint();
+        spMessages.repaint();
     }
     
     /**

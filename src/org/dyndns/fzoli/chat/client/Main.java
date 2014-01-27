@@ -358,9 +358,9 @@ public class Main {
      */
     public static void showConnectionStatus(Status status) {
         if (exiting) return;
-//        if ((delayedConnecting || CONN.isConnecting() || CONN.isCancelled()) && status != Status.CONNECTING) return; // TODO: bugfix
+        if ((delayedConnecting || CONN.isConnecting() || CONN.isCancelled()) && status != Status.CONNECTING) return;
+        if (status != null) CHAT_FRAME.setVisible(false);
         PROGRESS_FRAME.setStatus(status, MI_RECONNECT);
-        CHAT_FRAME.setVisible(false);
         setTrayConnectionAnimation(status == Status.CONNECTING);
     }
     
