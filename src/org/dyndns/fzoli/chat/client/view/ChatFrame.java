@@ -18,16 +18,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -44,6 +45,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import org.dyndns.fzoli.chat.client.ClientSideGroupChatData;
 import org.dyndns.fzoli.chat.client.Main;
+import static org.dyndns.fzoli.chat.client.Main.LNG_FRAME;
 import org.dyndns.fzoli.chat.model.UserData;
 import org.dyndns.fzoli.ui.FixedStyledEditorKit;
 import org.dyndns.fzoli.ui.ScrollingDocumentListener;
@@ -358,7 +360,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     /**
      * A formázott dokumentum stílusainak kulcsai.
      */
-    private static final String KEY_DATE = "date",
+    private static final String KEY_DAY = "day",
+                                KEY_DATE = "date",
                                 KEY_NAME = "name",
                                 KEY_MYNAME = "myname",
                                 KEY_SYSNAME = "sysname",
@@ -441,6 +444,9 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
             doc = tpMessages.getStyledDocument();
             Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
             Style regular = doc.addStyle(KEY_REGULAR, def);
+            
+            Style day = doc.addStyle(KEY_DAY, regular);
+            StyleConstants.setBold(day, true);
             
             Style date = doc.addStyle(KEY_DATE, regular);
             StyleConstants.setForeground(date, Color.GRAY);
@@ -607,15 +613,12 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      */
     private String lastSender;
     
+    private Date lastDay;
+    
     /**
      * A saját felhasználónév.
      */
     private static String senderName;
-    
-    /**
-     * A használt rendszerüzenetek típusai és szövegük.
-     */
-    private final Map<Integer, String> sysMessages = Collections.synchronizedMap(new HashMap<Integer, String>());
     
     /**
      * A rendszerüzenetek dátumait tartalmazó lista.
@@ -723,16 +726,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     public void relocalize() {
         setTitle();
         LB_ATTENDEES.setText(getString("attendees"));
-        Iterator<Entry<Integer, String>> it = sysMessages.entrySet().iterator();
-        Map<Integer, String> newValues = new HashMap<Integer, String>();
-        while (it.hasNext()) { // a használt rendszerüzenetek lecserélése az új nyelv alapján
-            Entry<Integer, String> e = it.next();
-            String newValue = getSysText(e.getKey(), "");
-            replace(e.getValue(), newValue, 0, true);
-            newValues.put(e.getKey(), newValue);
-        }
-        sysMessages.clear(); // az új értékek nyílvántartásba vétele
-        sysMessages.putAll(newValues);
+        replaceChatMessages(Main.DATA.getMessages());
     }
     
     /**
@@ -742,7 +736,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         synchronized (DOC_LOCK) {
             try {
                 lastSender = null;
-                sysMessages.clear();
+                lastDay = null;
                 SYS_MESSAGES.clear();
                 doc.remove(0, doc.getLength());
             }
@@ -821,7 +815,6 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         if (s != null) {
             SYS_MESSAGES.add(new ChatMessage(type, d, name, name, null));
             addMessage(d, name, s, true);
-            sysMessages.put(type, s);
             sysDates.add(d);
         }
     }
@@ -912,6 +905,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 
                 Iterator<Entry<String, String>> it = messages.entrySet().iterator();
                 Entry<String, String> first = it.next();
+                String dayText = ChatFrame.getDayText(date);
+                if (lastDay == null || !ChatFrame.getDayText(lastDay).equals(dayText)) doc.insertString(doc.getLength(), (doc.getLength() > 0 ? "\n" : "") + dayText, doc.getStyle(KEY_DAY));
                 doc.insertString(doc.getLength(), (doc.getLength() > 0 ? "\n" : "") + '[' + DATE_FORMAT.format(date) + "] ", doc.getStyle(KEY_DATE));
                 doc.insertString(doc.getLength(), (me ? ("* " + name) : (name.equals(lastSender) ? "..." : (name + ':'))) + ' ', doc.getStyle(sysmsg ? KEY_SYSNAME : isSenderName(name) ? KEY_MYNAME : KEY_NAME));
                 doc.insertString(doc.getLength(), (!me && startNewline ? "\n" : "") + first.getKey(), doc.getStyle(first.getValue()));
@@ -922,6 +917,7 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
                 messages.clear();
                 
                 lastSender = me ? "" : name;
+                lastDay = date;
             }
             catch (Exception ex) {
                 ;
@@ -977,6 +973,11 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         pane.setResizeWeight(1.0);
         pane.setBorder(null);
         return pane;
+    }
+    
+    private static String getDayText(Date d) {
+        DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, LNG_FRAME == null ? Locale.getDefault() : LNG_FRAME.getLanguage());
+        return formatter.format(d);
     }
     
     /**

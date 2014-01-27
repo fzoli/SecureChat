@@ -39,11 +39,6 @@ public class ConnectionHelper extends AbstractConnectionHelper implements Connec
         return new ChatClientHandler(socket, deviceId, connectionId);
     }
 
-    @Override
-    protected void onConnected() {
-        ;
-    }
-
     /**
      * Megpróbálja létrehozni a kapcsolatot.
      * Ha a tanúsítvány beolvasása nem sikerült, valószínűleg jelszóvédett a fájl, ezért bekéri a jelszót és újra próbálkozik.

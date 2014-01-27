@@ -220,7 +220,9 @@ public class SystemTrayIcon {
     }
     
     public static void stopIconAnimation() {
-        runningAnimationId = -1;
+        synchronized(LOCK) {
+            runningAnimationId = -1;
+        }
     }
     
     /**

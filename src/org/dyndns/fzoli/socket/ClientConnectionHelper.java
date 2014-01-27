@@ -53,7 +53,7 @@ public abstract class ClientConnectionHelper {
     /**
      * Kapcsolódás megszakítására létrehozott segédváltozó.
      */
-    private boolean cancelled;
+    private int state = -1;
     
     /**
      * Egyszerű kapcsolódást megvalósító osztály konstruktora.
@@ -113,8 +113,11 @@ public abstract class ClientConnectionHelper {
      * @return true, ha a kapcsolódás folyamatban van
      */
     public boolean isConnecting() {
-        removeClosedConnections();
-        return !cancelled && getConnectionsSize() > 0 && getConnectionsSize() < connectionIds.length;
+        return state == 0;
+    }
+    
+    public boolean isCancelled() {
+        return state == -2;
     }
     
     /**
@@ -173,7 +176,7 @@ public abstract class ClientConnectionHelper {
             synchronized(CONNECTIONS) {
                 if (conn != null) CONNECTIONS.add(conn);
             }
-            if (conn == null || cancelled) {
+            if (conn == null || isCancelled()) {
                 disconnect();
                 return;
             }
@@ -181,19 +184,13 @@ public abstract class ClientConnectionHelper {
             if (addListener) handler.addHandlerListener(listener);
             new Thread(handler).start();
             if (connectionId == connectionIds[connectionIds.length - 1]) {
+                state = 1;
                 onConnected();
             }
         }
         catch (Exception ex) {
             onException(ex, connectionId);
         }
-    }
-
-    /**
-     * Kapcsolat kialakításakor megadható callback segédmetódusa.
-     */
-    protected boolean isCancelled() {
-        return cancelled;
     }
     
     /**
@@ -215,11 +212,11 @@ public abstract class ClientConnectionHelper {
      * false esetén megszakad a kapcsolódás
      */
     public void connect(boolean close) {
-        cancelled = false;
         if (isConnecting() || isConnected()) {
             if (close) disconnect();
             else return;
         }
+        state = 0;
         new Thread(new Runnable() {
 
             @Override
@@ -236,7 +233,7 @@ public abstract class ClientConnectionHelper {
      * Ha bármi hiba történik a kapcsolódások közben, {@code onException} metódus fut le.
      */
     public void connect(final int connectionId) {
-        cancelled = false;
+        state = 0;
         new Thread(new Runnable() {
 
             @Override
@@ -283,7 +280,7 @@ public abstract class ClientConnectionHelper {
      * kapcsolathoz tartozó adatfeldolgozó le nem áll.
      */
     public void disconnect() {
-        cancelled = true;
+        state = -2;
         synchronized(CONNECTIONS) {
             Iterator<SSLSocket> it = CONNECTIONS.iterator();
             while (it.hasNext()) {

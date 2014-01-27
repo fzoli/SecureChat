@@ -18,12 +18,6 @@ public class ChatClientDisconnectProcess extends ClientDisconnectProcess impleme
     }
     
     @Override
-    protected void onConnect() {
-        setTimeout(false);
-        super.onConnect();
-    }
-    
-    @Override
     protected void onTimeout(Exception ex) throws Exception {
         setTimeout(true);
         super.onTimeout(ex);

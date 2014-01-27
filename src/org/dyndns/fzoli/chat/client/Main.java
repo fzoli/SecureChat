@@ -178,7 +178,7 @@ public class Main {
     /**
      * Segédváltozó kapcsolódás kérés detektálására.
      */
-    private static boolean connecting = false;
+    private static boolean delayedConnecting = false;
     
     /**
      * A program leállítása.
@@ -288,6 +288,7 @@ public class Main {
     public static void showSettingFrame(boolean force, Integer tabIndex) {
         if (!CONN.isConnected()) {
             CONN.disconnect();
+            setTrayConnectionAnimation(false);
         }
         if (PROGRESS_FRAME != null) {
             PROGRESS_FRAME.setVisible(false);
@@ -339,7 +340,8 @@ public class Main {
     private static void showConnecting() {
         if (SplashScreenLoader.isVisible()) {
             SplashScreenLoader.setSplashMessage(getString("connect_to_server"));
-//            setTrayConnectionAnimation(true);
+            setTrayConnectionAnimation(true);
+            MI_RECONNECT.setEnabled(false);
         }
         else {
             showConnectionStatus(Status.CONNECTING);
@@ -356,10 +358,10 @@ public class Main {
      */
     public static void showConnectionStatus(Status status) {
         if (exiting) return;
-        if (connecting && status != Status.CONNECTING) return;
+        if ((delayedConnecting || CONN.isConnecting() || CONN.isCancelled()) && status != Status.CONNECTING) return;
         PROGRESS_FRAME.setStatus(status, MI_RECONNECT);
         CHAT_FRAME.setVisible(false);
-//        setTrayConnectionAnimation(status == Status.CONNECTING);
+        setTrayConnectionAnimation(status == Status.CONNECTING);
     }
     
     /**
@@ -410,14 +412,14 @@ public class Main {
      * @param delay legyen-e késleltetés
      */
     public static void runClient(boolean delay) {
-        if (connecting || CONN.isConnected()) return;
-        connecting = true;
+        if (delayedConnecting || CONN.isConnected()) return;
+        delayedConnecting = true;
         showConnecting();
         TIMER_CONN.schedule(new TimerTask() {
 
             @Override
             public void run() {
-                connecting = false;
+                delayedConnecting = false;
                 CONN.connect();
             }
             
