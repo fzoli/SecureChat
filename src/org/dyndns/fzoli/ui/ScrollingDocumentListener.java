@@ -79,20 +79,20 @@ public class ScrollingDocumentListener implements DocumentListener {
     
     @Override
     public void changedUpdate(DocumentEvent e) {
-        maybeScrollToBottom();
+        scrollToBottomIfNeed();
     }
 
     @Override
     public void insertUpdate(DocumentEvent e) {
-        maybeScrollToBottom();
+        scrollToBottomIfNeed();
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
-        maybeScrollToBottom();
+        scrollToBottomIfNeed();
     }
 
-    private void maybeScrollToBottom() {
+    public void scrollToBottomIfNeed() {
         if (!isEnabled()) return;
         boolean scrollBarAtBottom = isScrollBarFullyExtended(VERTICAL_SCROLL_BAR);
         boolean scrollLock;
