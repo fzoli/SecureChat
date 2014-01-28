@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,13 +109,11 @@ public abstract class UpdateFinder implements Runnable {
                 File tmpDir = Files.createTempDirectory(TMP_DIR_NAME).toFile();
                 File tmpBin = new File(tmpDir, EXT_JAR_NAME);
                 tmpBin.createNewFile();
-                OutputStream os = new FileOutputStream(tmpBin, false);
+                FileOutputStream fos = new FileOutputStream(tmpBin, false);
                 InputStream is = jar.getInputStream(e);
-                while (is.available() > 0) {
-                    os.write(is.read());
-                }
-                os.flush();
-                os.close();
+                ReadableByteChannel rbc = Channels.newChannel(is);
+                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                fos.close();
                 is.close();
                 updaterPath = tmpBin.getAbsolutePath();
             }

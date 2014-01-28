@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import java.awt.Window;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -34,10 +35,13 @@ public class Updater implements Runnable {
         int errors = 0;
         while (it.hasNext()) try {
             Map.Entry<String, String> e = it.next();
-            URL website = new URL(e.getKey());
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+            URL url = new URL(e.getKey());
+            InputStream in = url.openStream();
+            ReadableByteChannel rbc = Channels.newChannel(in);
             FileOutputStream fos = new FileOutputStream(e.getValue(), false);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
+            in.close();
         }
         catch (Exception e) {
             errors++;
