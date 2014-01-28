@@ -129,6 +129,7 @@ public abstract class UpdateFinder implements Runnable {
             procParams.add(b64);
             try {
                 new ProcessBuilder(procParams).start();
+                System.exit(0);
             }
             catch (Exception ex) {
                 OptionPane.showWarningDialog(icon, (String) UIManager.get(KEY_ERR_JAVA), (String) UIManager.get(KEY_TITLE));
