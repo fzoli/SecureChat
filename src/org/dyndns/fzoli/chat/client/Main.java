@@ -1,5 +1,9 @@
 package org.dyndns.fzoli.chat.client;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import org.dyndns.fzoli.chat.SplashScreenLoader;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -10,6 +14,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.font.LineMetrics;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Locale;
@@ -206,7 +212,7 @@ public class Main {
     private static void setSystemTrayIcon() {
         if (SystemTrayIcon.init(true) && SystemTrayIcon.isSupported()) {
             // az ikon beállítása
-            SystemTrayIcon.setIcon(getString("app_name"), R.resize(R.getClientImage(), SystemTrayIcon.getIconWidth()), new Runnable() {
+            SystemTrayIcon.setIcon(getString("app_name"), createDefaultTrayIcon(), new Runnable() {
 
                 @Override
                 public void run() {
@@ -279,6 +285,10 @@ public class Main {
         }
     }
     
+    private static BufferedImage createDefaultTrayIcon() {
+        return R.resize(R.getClientImage(), SystemTrayIcon.getIconWidth());
+    }
+    
     /**
      * A beállításkezelő ablakot jeleníti meg.
      * Ha a helyes konfiguráció kényszerített, az ablak bezárása után figyelmeztetés jelenhet meg a beállításokkal kapcsolatban.
@@ -316,10 +326,31 @@ public class Main {
             SystemTrayIcon.startIconAnimation(R.getConnectingIcons(), 40);
         }
         else {
-            BufferedImage img = R.resize(R.getClientImage(), SystemTrayIcon.getIconWidth());
+            BufferedImage img = createDefaultTrayIcon();
             SystemTrayIcon.stopIconAnimation();
             SystemTrayIcon.setIcon(img);
         }
+    }
+    
+    private static String prevTrayText = "0";
+    
+    private static final Font TRAY_FONT = new Font("Arial", Font.BOLD, 14);
+    
+    public static void setTrayIconNumber(int i) {
+        String text = i < 10 ? ""+i : "n";
+        if (prevTrayText.equals(text)) return;
+        BufferedImage img = createDefaultTrayIcon();
+        if (i != 0) {
+            Graphics2D g = (Graphics2D) img.getGraphics();
+            g.setColor(Color.BLACK);
+            g.setFont(TRAY_FONT);
+            int cx = img.getWidth() / 2;
+            int cy = img.getHeight() / 2;
+            FontMetrics fm = g.getFontMetrics(TRAY_FONT);
+            g.drawString(text, cx - (fm.stringWidth(text) / 2), cy + 3);
+        }
+        SystemTrayIcon.setIcon(img);
+        prevTrayText = text;
     }
     
     /**

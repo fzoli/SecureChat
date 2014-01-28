@@ -16,6 +16,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URI;
 import java.net.URL;
 import java.text.DateFormat;
@@ -632,6 +634,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      */
     private static final int SYS_CONNECT = -1, SYS_DISCONNECT = -2;
     
+    private boolean activeWindow = false;
+    
     /**
      * Konstruktor.
      */
@@ -644,7 +648,27 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
         pane.setBorder(BorderFactory.createEmptyBorder(MARGIN, MARGIN, MARGIN, MARGIN));
         add(pane);
         
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                activeWindow = true;
+                unreadedMessages = 0;
+                Main.setTrayIconNumber(0);
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                activeWindow = false;
+            }
+            
+        });
+        
         pack();
+    }
+
+    public boolean isActiveWindow() {
+        return activeWindow;
     }
     
     /**
@@ -871,6 +895,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
     
     private final Pattern URL_PATTERN = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     
+    private int unreadedMessages = 0;
+    
     /**
      * Chatüzenetet illetve rendszerüzenetet jelenít meg és a scrollt beállítja.
      * @param date az üzenet elküldésének ideje
@@ -880,6 +906,9 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      */
     private void addMessage(Date date, String name, String message, boolean sysmsg) {
         synchronized (DOC_LOCK) {
+            if (!isActiveWindow() && !freezeMsg) {
+                Main.setTrayIconNumber(++unreadedMessages);
+            }
             try {
                 if (date == null || name == null || message == null) return;
                 boolean me = message.indexOf("/me ") == 0;
