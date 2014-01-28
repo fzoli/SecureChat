@@ -28,7 +28,7 @@ public class Updater implements Runnable {
     public static void main(String[] args) {
         File srcFile = Folders.getSourceFile();
         String runningFrom = srcFile.getAbsolutePath();
-        boolean updaterBinary = runningFrom.endsWith(UpdateFinder.EXT_JAR_NAME);
+        boolean updaterBinary = runningFrom.endsWith(UpdateFinder.EXT_JAR_NAME) && runningFrom.contains(UpdateFinder.TMP_DIR_NAME);
         if (updaterBinary) {
             final File tmpDir = srcFile.getParentFile();
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

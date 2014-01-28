@@ -28,6 +28,7 @@ import org.dyndns.fzoli.util.OSUtils;
 public abstract class UpdateFinder implements Runnable {
     
     static final String EXT_JAR_NAME = "updater.jar";
+    static final String TMP_DIR_NAME = "java-app-updater";
 
     protected abstract boolean hasNewVersion();
     
@@ -101,7 +102,7 @@ public abstract class UpdateFinder implements Runnable {
             JarFile jar = new JarFile(JAR_FILE);
             ZipEntry e = jar.getEntry(updaterJarPathInJar);
             if (e != null) {
-                File tmpDir = Files.createTempDirectory("java-updater").toFile();
+                File tmpDir = Files.createTempDirectory(TMP_DIR_NAME).toFile();
                 File tmpBin = new File(tmpDir, EXT_JAR_NAME);
                 tmpBin.createNewFile();
                 OutputStream os = new FileOutputStream(tmpBin, false);
