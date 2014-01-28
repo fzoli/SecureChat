@@ -85,6 +85,17 @@ public abstract class UpdateFinder implements Runnable {
         UIUtil.init(KEY_ERR_JAVA, "The Java binary could not be found.");
     }
     
+    public static boolean isSupported() {
+        try {
+            String version = System.getProperty("java.version");
+            double ver = Double.parseDouble(version.substring(0, version.indexOf('.', version.indexOf('.') + 1)));
+            return ver > 1.6;
+        }
+        catch (Exception ex) {
+            return true;
+        }
+    }
+    
     public static boolean isRunnable() {
         return IN_JAR || IN_JARBUNDLER;
     }
@@ -146,7 +157,7 @@ public abstract class UpdateFinder implements Runnable {
     @Override
     public void run() {
         if (GraphicsEnvironment.isHeadless()) return;
-        while (isEnabled()) {
+        while (isSupported() && isEnabled()) {
             if (hasNewVersion() && OptionPane.showYesNoDialog(icon, (String) UIManager.get(KEY_MESSAGE), (String) UIManager.get(KEY_TITLE)) == 0) {
                 startUpdate();
                 break;
