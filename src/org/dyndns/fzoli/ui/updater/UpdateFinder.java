@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
@@ -113,6 +112,7 @@ public abstract class UpdateFinder implements Runnable {
                 InputStream is = jar.getInputStream(e);
                 ReadableByteChannel rbc = Channels.newChannel(is);
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                fos.flush();
                 fos.close();
                 is.close();
                 updaterPath = tmpBin.getAbsolutePath();

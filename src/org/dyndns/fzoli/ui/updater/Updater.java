@@ -38,10 +38,16 @@ public class Updater implements Runnable {
             URL url = new URL(e.getKey());
             InputStream in = url.openStream();
             ReadableByteChannel rbc = Channels.newChannel(in);
-            FileOutputStream fos = new FileOutputStream(e.getValue(), false);
+            File tmpFile = new File(e.getValue() + ".tmp");
+            tmpFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(tmpFile, false);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.flush();
             fos.close();
             in.close();
+            File origFile = new File(e.getValue());
+            if (origFile.isFile()) origFile.delete();
+            tmpFile.renameTo(origFile);
         }
         catch (Exception e) {
             errors++;
