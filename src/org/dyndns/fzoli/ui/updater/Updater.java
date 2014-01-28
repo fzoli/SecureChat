@@ -11,6 +11,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import org.dyndns.fzoli.chat.SplashScreenLoader;
 import org.dyndns.fzoli.resource.Base64;
 import org.dyndns.fzoli.ui.OptionPane;
 import org.dyndns.fzoli.ui.UIUtil;
@@ -20,7 +21,7 @@ import org.dyndns.fzoli.util.Folders;
  *
  * @author zoli
  */
-public class Updater implements Runnable {
+public abstract class Updater implements Runnable {
 
     private final UpdateModel model;
     
@@ -28,29 +29,36 @@ public class Updater implements Runnable {
         this.model = model;
     }
     
+    protected abstract void printGUI(File f, int count, int size);
+    
     @Override
     public void run() {
-        OptionPane.showWarningDialog((Window) null, "Update will be running in the background!\nWhen it finishes, it will open the app.", "Updater");
         Iterator<Map.Entry<String, String>> it = model.UPDATE_MAP.entrySet().iterator();
-        int errors = 0;
-        while (it.hasNext()) try {
-            Map.Entry<String, String> e = it.next();
-            URL url = new URL(e.getKey());
-            InputStream in = url.openStream();
-            ReadableByteChannel rbc = Channels.newChannel(in);
-            File tmpFile = new File(e.getValue() + ".tmp");
-            tmpFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(tmpFile, false);
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            fos.flush();
-            fos.close();
-            in.close();
-            File origFile = new File(e.getValue());
-            if (origFile.isFile()) origFile.delete();
-            tmpFile.renameTo(origFile);
-        }
-        catch (Exception e) {
-            errors++;
+        int errors = 0, count = 0;
+        while (it.hasNext()) {
+            count++;
+            File tmpFile = null;
+            try {
+                Map.Entry<String, String> e = it.next();
+                File origFile = new File(e.getValue());
+                printGUI(origFile, count, model.UPDATE_MAP.size());
+                URL url = new URL(e.getKey());
+                InputStream in = url.openStream();
+                ReadableByteChannel rbc = Channels.newChannel(in);
+                tmpFile = new File(e.getValue() + ".tmp");
+                tmpFile.createNewFile();
+                FileOutputStream fos = new FileOutputStream(tmpFile, false);
+                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                fos.flush();
+                fos.close();
+                in.close();
+                if (origFile.isFile()) origFile.delete();
+                tmpFile.renameTo(origFile);
+            }
+            catch (Exception e) {
+                errors++;
+                if (tmpFile != null && tmpFile.isFile()) tmpFile.delete();
+            }
         }
         ArrayList<String> ls = new ArrayList<String>();
         if (model.JARBUNDLER) {
@@ -78,6 +86,7 @@ public class Updater implements Runnable {
         if (errors > 0) {
             OptionPane.showWarningDialog((Window) null, "There were " + errors + " error" + (errors > 1 ? "s" : "" ) + " while the updating process was running!", "Updater");
         }
+        System.exit(0);
     }
     
     public static void main(String[] args) {
@@ -105,7 +114,16 @@ public class Updater implements Runnable {
                 return;
             }
             UIUtil.setSystemLookAndFeel();
-            new Updater(model).run();
+            new Updater(model) {
+
+                @Override
+                protected void printGUI(File f, int count, int size) {
+                    if (SplashScreenLoader.isVisible()) {
+                        SplashScreenLoader.setSplashMessage("Upgrading the application");
+                    }
+                }
+                
+            }.run();
         }
     }
     
