@@ -760,6 +760,8 @@ public class ChatFrame extends JFrame implements RelocalizableWindow {
      */
     public void removeChatMessages() {
         synchronized (DOC_LOCK) {
+            unreadedMessages = 0;
+            Main.setTrayIconNumber(0);
             try {
                 lastSender = null;
                 lastDay = null;
