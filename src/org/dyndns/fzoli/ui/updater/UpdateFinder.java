@@ -39,6 +39,7 @@ public abstract class UpdateFinder implements Runnable {
     private final Image icon;
     private final String updaterJarPathInJar;
     private final int delay;
+    private final String[] args;
     
     public static final String KEY_TITLE = "Updater.title", KEY_MESSAGE = "Updater.message", KEY_ERR_JAVA = "Updater.javaError", KEY_ERR_EXTRCT = "Updater.extractError";
     
@@ -72,10 +73,11 @@ public abstract class UpdateFinder implements Runnable {
         IN_JARBUNDLER = inJarbundler;
     }
     
-    public UpdateFinder(Image icon, int delay, String updaterJarPathInJar) {
+    public UpdateFinder(Image icon, int delay, String updaterJarPathInJar, String[] args) {
         this.icon = icon;
         this.delay = delay;
         this.updaterJarPathInJar = updaterJarPathInJar;
+        this.args = args;
         UIUtil.init(KEY_TITLE, "Updater");
         UIUtil.init(KEY_MESSAGE, "New version is available.\nWould you like to update the application?");
         UIUtil.init(KEY_ERR_EXTRCT, "The updater could not be extracted.");
@@ -120,7 +122,7 @@ public abstract class UpdateFinder implements Runnable {
             ;
         }
         if (updaterPath != null) {
-            UpdateModel model = new UpdateModel(getUpdateMap(), inJarbundler(), getBinaryPath());
+            UpdateModel model = new UpdateModel(getUpdateMap(), inJarbundler(), getBinaryPath(), args);
             String json = GSON.toJson(model);
             String b64 = Base64.encode(json.getBytes());
             ArrayList<String> procParams = new ArrayList<String>();
@@ -163,7 +165,7 @@ public abstract class UpdateFinder implements Runnable {
     
     public static void main(String[] args) {
         UIUtil.setSystemLookAndFeel();
-        new UpdateFinder(null, 3000, "updater.jar") {
+        new UpdateFinder(null, 3000, "updater.jar", null) {
             
             @Override
             protected boolean hasNewVersion() {
