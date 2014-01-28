@@ -2,9 +2,11 @@ package org.dyndns.fzoli.ui.updater;
 
 import com.google.gson.Gson;
 import java.awt.Window;
+import java.io.File;
 import org.dyndns.fzoli.resource.Base64;
 import org.dyndns.fzoli.ui.OptionPane;
 import org.dyndns.fzoli.ui.UIUtil;
+import org.dyndns.fzoli.util.Folders;
 
 /**
  *
@@ -24,6 +26,20 @@ public class Updater implements Runnable {
     }
     
     public static void main(String[] args) {
+        File srcFile = Folders.getSourceFile();
+        String runningFrom = srcFile.getAbsolutePath();
+        boolean updaterBinary = runningFrom.endsWith(UpdateFinder.EXT_JAR_NAME);
+        if (updaterBinary) {
+            final File tmpDir = srcFile.getParentFile();
+            Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Folders.delete(tmpDir);
+                }
+                
+            }));
+        }
         if (args.length == 1) {
             UpdateModel model;
             try {

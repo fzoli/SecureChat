@@ -26,6 +26,8 @@ import org.dyndns.fzoli.util.OSUtils;
  * @author zoli
  */
 public abstract class UpdateFinder implements Runnable {
+    
+    static final String EXT_JAR_NAME = "updater.jar";
 
     protected abstract boolean hasNewVersion();
     
@@ -39,10 +41,6 @@ public abstract class UpdateFinder implements Runnable {
     
     public static final String KEY_TITLE = "Updater.title", KEY_MESSAGE = "Updater.message", KEY_ERR_JAVA = "Updater.javaError", KEY_ERR_EXTRCT = "Updater.extractError";
     
-    /**
-     * A forrásfájlra mutató objektum.
-     * Ha nem sikerült lekérni, a jelenlegi könyvtár, csak hogy ne legyen null.
-     */
     private static final File SRC_FILE = Folders.getSourceFile() == null ? new File(".") : Folders.getSourceFile();
     
     /**
@@ -60,7 +58,7 @@ public abstract class UpdateFinder implements Runnable {
     
     static {
         final String srcPath = SRC_FILE.getAbsolutePath();
-        IN_JAR = SRC_FILE.getName().endsWith("jar");
+        IN_JAR = SRC_FILE.getName().endsWith(".jar");
         JAR_FILE = IN_JAR ? srcPath : null;
         boolean inJarbundler = OSUtils.isOS(OSUtils.OS.MAC) && srcPath.contains(".app/Contents/Resources/Java/");
         String macAppDir = null;
@@ -104,7 +102,7 @@ public abstract class UpdateFinder implements Runnable {
             ZipEntry e = jar.getEntry(updaterJarPathInJar);
             if (e != null) {
                 File tmpDir = Files.createTempDirectory("java-updater").toFile();
-                File tmpBin = new File(tmpDir, "updater.jar");
+                File tmpBin = new File(tmpDir, EXT_JAR_NAME);
                 tmpBin.createNewFile();
                 OutputStream os = new FileOutputStream(tmpBin, false);
                 InputStream is = jar.getInputStream(e);
