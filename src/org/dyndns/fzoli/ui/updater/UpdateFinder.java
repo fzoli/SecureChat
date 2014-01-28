@@ -11,7 +11,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -41,6 +40,9 @@ public abstract class UpdateFinder implements Runnable {
     private final String updaterJarPathInJar;
     private final int delay;
     private final String[] args;
+    private final boolean silent;
+    
+    private boolean crashed = false;
     
     public static final String KEY_TITLE = "Updater.title", KEY_MESSAGE = "Updater.message", KEY_ERR_JAVA = "Updater.javaError", KEY_ERR_EXTRCT = "Updater.extractError";
     
@@ -74,7 +76,8 @@ public abstract class UpdateFinder implements Runnable {
         IN_JARBUNDLER = inJarbundler;
     }
     
-    public UpdateFinder(Image icon, int delay, String updaterJarPathInJar, String[] args) {
+    public UpdateFinder(boolean silent, Image icon, int delay, String updaterJarPathInJar, String[] args) {
+        this.silent = silent;
         this.icon = icon;
         this.delay = delay;
         this.updaterJarPathInJar = updaterJarPathInJar;
@@ -146,19 +149,21 @@ public abstract class UpdateFinder implements Runnable {
                 System.exit(0);
             }
             catch (Exception ex) {
-                OptionPane.showWarningDialog(icon, (String) UIManager.get(KEY_ERR_JAVA), (String) UIManager.get(KEY_TITLE));
+                crashed = true;
+                if (!silent) OptionPane.showWarningDialog(icon, (String) UIManager.get(KEY_ERR_JAVA), (String) UIManager.get(KEY_TITLE));
             }
         }
         else {
-            OptionPane.showWarningDialog(icon, (String) UIManager.get(KEY_ERR_EXTRCT), (String) UIManager.get(KEY_TITLE));
+            crashed = true;
+            if (!silent) OptionPane.showWarningDialog(icon, (String) UIManager.get(KEY_ERR_EXTRCT), (String) UIManager.get(KEY_TITLE));
         }
     }
     
     @Override
     public void run() {
         if (GraphicsEnvironment.isHeadless()) return;
-        while (isSupported() && isEnabled()) {
-            if (hasNewVersion() && OptionPane.showYesNoDialog(icon, (String) UIManager.get(KEY_MESSAGE), (String) UIManager.get(KEY_TITLE)) == 0) {
+        while (isSupported() && isEnabled() && !crashed) {
+            if (hasNewVersion() && (silent || OptionPane.showYesNoDialog(icon, (String) UIManager.get(KEY_MESSAGE), (String) UIManager.get(KEY_TITLE)) == 0)) {
                 startUpdate();
                 break;
             }
@@ -172,30 +177,6 @@ public abstract class UpdateFinder implements Runnable {
                 while (now.getTime() - lastRun.getTime() < delay);
             }
         }
-    }
-    
-    public static void main(String[] args) {
-        UIUtil.setSystemLookAndFeel();
-        new UpdateFinder(null, 3000, "updater.jar", null) {
-            
-            @Override
-            protected boolean hasNewVersion() {
-                return true;
-            }
-            
-            @Override
-            protected boolean isEnabled() {
-                return true;
-            }
-
-            @Override
-            protected Map<String, String> getUpdateMap() {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("https://github.com/fzoli/SecureChat/raw/master/bin/SecureChat.jar", SRC_FILE.getAbsolutePath());
-                return map;
-            }
-            
-        }.run();
     }
     
 }

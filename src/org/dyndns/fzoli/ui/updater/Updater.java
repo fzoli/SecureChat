@@ -11,7 +11,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import org.dyndns.fzoli.chat.SplashScreenLoader;
 import org.dyndns.fzoli.resource.Base64;
 import org.dyndns.fzoli.ui.OptionPane;
 import org.dyndns.fzoli.ui.UIUtil;
@@ -23,9 +22,9 @@ import org.dyndns.fzoli.util.Folders;
  */
 public abstract class Updater implements Runnable {
 
-    private final UpdateModel model;
-    
-    public Updater(UpdateModel model) {
+    private UpdateModel model;
+
+    private void setModel(UpdateModel model) {
         this.model = model;
     }
     
@@ -89,7 +88,7 @@ public abstract class Updater implements Runnable {
         System.exit(0);
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args, Updater updater) {
         File srcFile = Folders.getSourceFile();
         String runningFrom = srcFile.getAbsolutePath();
         boolean updaterBinary = runningFrom.endsWith(UpdateFinder.EXT_JAR_NAME) && runningFrom.contains(UpdateFinder.TMP_DIR_NAME);
@@ -114,16 +113,8 @@ public abstract class Updater implements Runnable {
                 return;
             }
             UIUtil.setSystemLookAndFeel();
-            new Updater(model) {
-
-                @Override
-                protected void printGUI(File f, int count, int size) {
-                    if (SplashScreenLoader.isVisible()) {
-                        SplashScreenLoader.setSplashMessage("Upgrading the application");
-                    }
-                }
-                
-            }.run();
+            updater.setModel(model);
+            updater.run();
         }
     }
     

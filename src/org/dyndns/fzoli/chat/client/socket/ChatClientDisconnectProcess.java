@@ -6,6 +6,7 @@ import org.dyndns.fzoli.socket.handler.SecureHandler;
 import org.dyndns.fzoli.socket.process.impl.ClientDisconnectProcess;
 import org.dyndns.fzoli.chat.client.view.ConnectionProgressFrame.Status;
 import static org.dyndns.fzoli.chat.client.Main.showConnectionStatus;
+import org.dyndns.fzoli.chat.updater.ChatAppUpdateFinder;
 
 /**
  *
@@ -13,8 +14,26 @@ import static org.dyndns.fzoli.chat.client.Main.showConnectionStatus;
  */
 public class ChatClientDisconnectProcess extends ClientDisconnectProcess implements ConnectionKeys {
 
+    private boolean connected = false;
+    
+    private final ChatAppUpdateFinder updateFinder = new ChatAppUpdateFinder() {
+
+        @Override
+        protected boolean isEnabled() {
+            return super.isEnabled() && connected;
+        }
+        
+    };
+    
     public ChatClientDisconnectProcess(SecureHandler handler) {
         super(handler, DC_TIMEOUT1, DC_TIMEOUT2, DC_DELAY);
+    }
+
+    @Override
+    protected void onConnect() {
+        connected = true;
+        new Thread(updateFinder).start();
+        super.onConnect();
     }
     
     @Override
@@ -31,6 +50,7 @@ public class ChatClientDisconnectProcess extends ClientDisconnectProcess impleme
     
     @Override
     protected void onDisconnect(Exception ex) {
+        connected = false;
         super.onDisconnect(ex);
         showConnectionStatus(Status.DISCONNECTED);
     }
