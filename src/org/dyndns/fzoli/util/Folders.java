@@ -12,18 +12,20 @@ public class Folders {
     /**
      * Rekurzívan törli a megadott fájlt.
      */
-    public static void delete(File f) {
+    public static boolean delete(File f) {
+        boolean b = true;
         if (f.isDirectory()) { // ha könyvtár ...
             File[] files = f.listFiles();
             if (files != null) {
                 for (File c : files) { // ... a benne lévő összes fájl...
-                    delete(c); // ... rekurzív törlése
+                    b &= delete(c); // ... rekurzív törlése
                 }
             }
         }
         if (f.exists()) { // ha a fájlnak már nincs gyermeke és még létezik...
-            f.delete(); // ... a fájl törlése
+            try { f.delete(); } catch (Exception ex) { b = false; } // ... a fájl törlése
         }
+        return b;
     }
     
     /**

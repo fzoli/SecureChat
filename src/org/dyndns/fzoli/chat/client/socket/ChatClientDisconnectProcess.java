@@ -19,7 +19,7 @@ public class ChatClientDisconnectProcess extends ClientDisconnectProcess impleme
     private final ChatAppUpdateFinder updateFinder = new ChatAppUpdateFinder() {
 
         @Override
-        protected boolean isEnabled() {
+        public boolean isEnabled() {
             return super.isEnabled() && connected;
         }
         

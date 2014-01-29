@@ -28,7 +28,7 @@ public abstract class Updater implements Runnable {
         this.model = model;
     }
     
-    protected abstract void printGUI(File f, int count, int size);
+    protected abstract void printGUI(String message, File f, int count, int size);
     
     @Override
     public void run() {
@@ -40,7 +40,7 @@ public abstract class Updater implements Runnable {
             try {
                 Map.Entry<String, String> e = it.next();
                 File origFile = new File(e.getValue());
-                printGUI(origFile, count, model.UPDATE_MAP.size());
+                printGUI(model.LOADING_MESSAGE, origFile, count, model.UPDATE_MAP.size());
                 URL url = new URL(e.getKey());
                 InputStream in = url.openStream();
                 ReadableByteChannel rbc = Channels.newChannel(in);
@@ -76,14 +76,20 @@ public abstract class Updater implements Runnable {
         if (model.ARGS != null) for (String arg : model.ARGS) {
             ls.add(arg);
         }
+        if (errors > 0) {
+            if (!model.SILENT) OptionPane.showWarningDialog((Window) null, model.ERR_MESSAGE_A + " " + errors + " " + model.ERR_MESSAGE_B, model.TITLE);
+            try {
+                new File(new File(model.BINARY).getParent(), UpdateFinder.TMP_ERR_NAME).createNewFile();
+            }
+            catch (Exception ex) {
+                ;
+            }
+        }
         try {
             new ProcessBuilder(ls).start();
         }
         catch (Exception ex) {
-            errors++;
-        }
-        if (errors > 0) {
-            OptionPane.showWarningDialog((Window) null, "There were " + errors + " error" + (errors > 1 ? "s" : "" ) + " while the updating process was running!", "Updater");
+            ;
         }
         System.exit(0);
     }

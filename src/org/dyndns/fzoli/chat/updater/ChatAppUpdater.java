@@ -11,9 +11,9 @@ import org.dyndns.fzoli.ui.updater.Updater;
 public class ChatAppUpdater extends Updater {
 
     @Override
-    protected void printGUI(File f, int count, int size) {
+    protected void printGUI(String upgradeMessage, File f, int count, int size) {
         if (SplashScreenLoader.isVisible()) {
-            SplashScreenLoader.setSplashMessage("Upgrading the application");
+            SplashScreenLoader.setSplashMessage(upgradeMessage);
         }
     }
     

@@ -19,6 +19,7 @@ import org.dyndns.fzoli.chat.server.config.Permissions;
 import org.dyndns.fzoli.chat.server.socket.ChatServerHandler;
 import org.dyndns.fzoli.chat.ui.UIUtil;
 import org.dyndns.fzoli.chat.ui.UncaughtExceptionHandler;
+import org.dyndns.fzoli.chat.updater.ChatAppUpdateFinder;
 import org.dyndns.fzoli.socket.SSLSocketUtil;
 import static org.dyndns.fzoli.ui.UIUtil.setSystemLookAndFeel;
 import org.dyndns.fzoli.ui.systemtray.SystemTrayIcon;
@@ -473,6 +474,13 @@ public class Main {
             System.exit(1); // hibakóddal lép ki
         }
         if (CONFIG.isCorrect()) {
+            ChatAppUpdateFinder updateFinder = new ChatAppUpdateFinder(false);
+            if (ChatAppUpdateFinder.isSupported() && updateFinder.isEnabled() && !updateFinder.isCrashed()) {
+                SplashScreenLoader.setSplashMessage(getString("searching_update"));
+                if (updateFinder.hasNewVersion()) {
+                    updateFinder.run();
+                }
+            }
             SplashScreenLoader.setSplashMessage(getString("start_server"));
             SwingUtilities.invokeLater(new Runnable() {
 

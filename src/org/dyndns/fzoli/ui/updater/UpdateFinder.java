@@ -29,6 +29,7 @@ public abstract class UpdateFinder implements Runnable {
     
     static final String EXT_JAR_NAME = "updater.jar";
     static final String TMP_DIR_NAME = "java-app-updater";
+    static final String TMP_ERR_NAME = "update-crash";
 
     protected abstract boolean hasNewVersion();
     
@@ -44,7 +45,7 @@ public abstract class UpdateFinder implements Runnable {
     
     private boolean crashed = false;
     
-    public static final String KEY_TITLE = "Updater.title", KEY_MESSAGE = "Updater.message", KEY_ERR_JAVA = "Updater.javaError", KEY_ERR_EXTRCT = "Updater.extractError";
+    public static final String KEY_TITLE = "Updater.title", KEY_MESSAGE = "Updater.message", KEY_ERR_JAVA = "Updater.javaError", KEY_ERR_EXTRCT = "Updater.extractError", KEY_UPGRADING = "Updater.upgrading", KEY_UPDATE_ERR_A = "Updater.updateErrorA", KEY_UPDATE_ERR_B = "Updater.updateErrorB";
     
     private static final File SRC_FILE = Folders.getSourceFile() == null ? new File(".") : Folders.getSourceFile();
     
@@ -86,6 +87,16 @@ public abstract class UpdateFinder implements Runnable {
         UIUtil.init(KEY_MESSAGE, "New version is available.\nWould you like to update the application?");
         UIUtil.init(KEY_ERR_EXTRCT, "The updater could not be extracted.");
         UIUtil.init(KEY_ERR_JAVA, "The Java binary could not be found.");
+        UIUtil.init(KEY_UPGRADING, "Upgrading the application");
+        UIUtil.init(KEY_UPDATE_ERR_A, "There were");
+        UIUtil.init(KEY_UPDATE_ERR_B, "errors while the updating process was running!");
+        if (getBinaryPath() != null) {
+            File crashFile = new File(new File(getBinaryPath()).getParent(), TMP_ERR_NAME);
+            if (crashFile.exists()) {
+                crashed = true;
+                try { crashFile.delete(); } catch (Exception ex) { }
+            }
+        }
     }
     
     public static boolean isSupported() {
@@ -112,6 +123,10 @@ public abstract class UpdateFinder implements Runnable {
     public static boolean inJarbundler() {
         return IN_JARBUNDLER;
     }
+
+    public boolean isCrashed() {
+        return crashed;
+    }
     
     private void startUpdate() {
         String updaterPath = null;
@@ -136,7 +151,7 @@ public abstract class UpdateFinder implements Runnable {
             ;
         }
         if (updaterPath != null) {
-            UpdateModel model = new UpdateModel(getUpdateMap(), inJarbundler(), getBinaryPath(), args);
+            UpdateModel model = new UpdateModel(getUpdateMap(), inJarbundler(), getBinaryPath(), args, silent, (String) UIManager.get(KEY_TITLE), (String) UIManager.get(KEY_UPGRADING), (String) UIManager.get(KEY_UPDATE_ERR_A), (String) UIManager.get(KEY_UPDATE_ERR_B));
             String json = GSON.toJson(model);
             String b64 = Base64.encode(json.getBytes());
             ArrayList<String> procParams = new ArrayList<String>();

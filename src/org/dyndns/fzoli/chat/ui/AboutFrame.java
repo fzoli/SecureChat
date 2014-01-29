@@ -36,7 +36,7 @@ public class AboutFrame extends JFrame implements RelocalizableWindow {
     /**
      * Az aktuális verziószám.
      */
-    public static final String VERSION = "0.5.0.20";
+    public static final String VERSION = "0.5.1.21";
     
     /**
      * A program logóját, nevét és verzióját megjelenítő panel.
